@@ -15,7 +15,11 @@ const InfoPanel = () => {
 
       <h3>Nearest Polygon</h3>
       {nearestPolygon ? (
-        <pre>{JSON.stringify(nearestPolygon.properties, null, 2)}</pre>
+        nearestPolygon.properties ? (
+          <pre>{JSON.stringify(nearestPolygon.properties, null, 2)}</pre>
+        ) : (
+          <p>Polygon has no properties.</p>
+        )
       ) : (
         <p>No polygon found yet.</p>
       )}
