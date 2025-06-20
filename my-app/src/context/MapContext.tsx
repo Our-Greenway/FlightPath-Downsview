@@ -7,6 +7,7 @@ type Coordinates = [number, number];
 interface MapContextType {
   userPoint: Coordinates | null;
   nearestPolygon: Feature<Polygon | MultiPolygon> | null;
+  distance: number | null;
   currentPolygonData: {
     id: string;
     heroImage: string;
@@ -20,6 +21,7 @@ const MapContext = createContext<MapContextType | undefined>(undefined);
 
 export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [userPoint, setUserPoint] = useState<Coordinates | null>(null);
+  const [distance, setDistance] = useState<number | null>(null);
   const [nearestPolygon, setNearestPolygon] = useState<Feature<Polygon | MultiPolygon> | null>(null);
   const [currentPolygonData, setCurrentPolygonData] = useState<{
     id: string;
@@ -51,6 +53,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       const snapped = turf.nearestPointOnLine(distanceLine, pt);
       const isInside = turf.booleanPointInPolygon(pt, nearestPolygon);
       const distance = turf.distance(pt, snapped, { units: "kilometers" });
+
+      setDistance(distance);
   
       console.log("Snapped Point:", snapped);
       console.log("Distance:", distance);
@@ -75,6 +79,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         userPoint,
         nearestPolygon,
         currentPolygonData,
+        distance,
         setUserPoint,
         setNearestPolygon,
       }}>
