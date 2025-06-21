@@ -8,6 +8,7 @@ interface MapContextType {
   userPoint: Coordinates | null;
   nearestPolygon: Feature<Polygon | MultiPolygon> | null;
   distance: number | null;
+  isInside: boolean | null;
   currentPolygonData: {
     id: string;
     heroImage: string;
@@ -23,6 +24,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [userPoint, setUserPoint] = useState<Coordinates | null>(null);
   const [distance, setDistance] = useState<number | null>(null);
   const [nearestPolygon, setNearestPolygon] = useState<Feature<Polygon | MultiPolygon> | null>(null);
+  const [isInside, setIsInside] = useState<boolean | null>(null);
   const [currentPolygonData, setCurrentPolygonData] = useState<{
     id: string;
     heroImage: string;
@@ -51,26 +53,28 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     if (distanceLine) {
       const pt = turf.point(userPoint);
       const snapped = turf.nearestPointOnLine(distanceLine, pt);
-      const isInside = turf.booleanPointInPolygon(pt, nearestPolygon);
+
+      let isInside = false;
+      if (nearestPolygon && turf.getType(nearestPolygon) === "Polygon" || turf.getType(nearestPolygon) === "MultiPolygon") {
+        isInside = turf.booleanPointInPolygon(pt, nearestPolygon);
+      }
+
       const distance = turf.distance(pt, snapped, { units: "kilometers" });
 
       setDistance(distance);
+      setIsInside(isInside);
+      console.log("Inside status:", isInside);
   
       console.log("Snapped Point:", snapped);
       console.log("Distance:", distance);
-  
-      if (isInside) {
-        const props = nearestPolygon.properties;
-        console.log(props?.id);
-        console.log(props?.heroImage);
-        setCurrentPolygonData({
-          id: props?.id,
-          heroImage: props?.heroImage,
-          description: props?.description,
-        });
-      } else {
-        setCurrentPolygonData(null);
-      }
+      const props = nearestPolygon.properties;
+      console.log(props?.id);
+      console.log(props?.heroImage);
+      setCurrentPolygonData({
+        id: props?.id,
+        heroImage: props?.heroImage,
+        description: props?.description,
+      });
     }
   }, [userPoint, nearestPolygon]);
   return (
@@ -80,6 +84,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         nearestPolygon,
         currentPolygonData,
         distance,
+        isInside,
         setUserPoint,
         setNearestPolygon,
       }}>

@@ -4,7 +4,8 @@
       {
         "type": "Feature",
         "properties": {
-          "id": "NorthFarm"
+          "id": "NorthFarm",
+          "heroImage": "/images/NorthFarm/heroImage.jpg"
         },
         "geometry": {
           "coordinates": [
