@@ -8,8 +8,8 @@ const InsidePanel = () => {
   const locationName = props?.id || 'Unknown Location';
 
   return (
-    <div className="rounded-lg overflow-hidden shadow-lg bg-white">
-      <div className="relative h-72 w-full bg-gray-200">
+    <div className="rounded-lg h-screen  overflow-hidden shadow-lg bg-white">
+      <div className="relative  p-25 w-full bg-gray-200">
         {heroImage ? (
           <div
             className="absolute inset-0 bg-cover bg-center"

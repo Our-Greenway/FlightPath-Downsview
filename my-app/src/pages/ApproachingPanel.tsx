@@ -9,8 +9,8 @@ const ApproachingPanel = () => {
   const dist = typeof distance === 'number' ? Math.round(distance * 1000) : null;
 
   return (
-    <div className="rounded-lg overflow-hidden shadow-lg bg-white">
-      <div className="relative h-72 w-full bg-gray-200">
+    <div className="rounded-lg h-screen overflow-hidden shadow-lg bg-white">
+      <div className="relative h-full p-25 w-full bg-gray-200">
         {heroImage ? (
           <div
             className="absolute inset-0 bg-cover bg-center"
@@ -31,21 +31,6 @@ const ApproachingPanel = () => {
         </div>
       </div>
 
-      <div className="p-4">
-        <h3 className="text-lg font-semibold">User Location</h3>
-        {userPoint ? (
-          <p>Lat: {userPoint[1].toFixed(5)}, Lng: {userPoint[0].toFixed(5)}</p>
-        ) : (
-          <p className="text-gray-500">Location not available</p>
-        )}
-
-        <h3 className="text-lg font-semibold mt-4">Polygon Data</h3>
-        {props ? (
-          <pre className="text-sm text-gray-800 bg-gray-100 p-2 rounded">{JSON.stringify(props, null, 2)}</pre>
-        ) : (
-          <p className="text-gray-500">No polygon data</p>
-        )}
-      </div>
     </div>
   );
 };
