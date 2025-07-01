@@ -10,25 +10,36 @@ const ApproachingPanel = () => {
 
   return (
     <div className="rounded-lg h-screen overflow-hidden shadow-lg bg-white">
-      <div className="relative h-full p-25 w-full bg-gray-200">
-        {heroImage ? (
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImage})` }}
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-            No image
-          </div>
-        )}
+      <div className="relative h-full w-full bg-gray-200">
+        <div
+          className="z-90 absolute inset-0 bg-cover bg-center w-[12%]"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        />
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-800/50 to-cyan-900" />
+          <div className="absolute inset-0 bg-green-800" />
+          <div className="absolute inset-0 flex flex-col justify-between text-white">
 
-        <div className="absolute bottom-0 w-full p-4 bg-opacity-80 text-white">
-          <p className="text-lg font-medium">Approaching:</p>
-          <h1 className="text-3xl font-bold">{locationName}</h1>
-          {dist !== null && <p className="text-lg mt-1">{dist} meters away</p>}
+          {/*Approaching text */}
+          <div className="flex-grow flex items-center pl-1 md:pl-15 lg:pl-30">
+            <div>
+              <p className="text-3xl font-medium">Approaching:</p>
+              <h1 className="text-4xl font-bold">{locationName}</h1>
+            </div>
+          </div>
+
+          {/* Distance */}
+          {dist !== null && (
+            <div className="w-full bg-black py-6">
+              <div className="text-white text-3xl pl-1 md:pl-15 lg:pl-30 font-bold">
+                In {dist}m
+              </div>
+            </div>
+          )}
         </div>
+          
+
+
+
       </div>
 
     </div>

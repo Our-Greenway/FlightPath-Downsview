@@ -4,6 +4,22 @@ import * as turf from '@turf/turf';
 
 type Coordinates = [number, number];
 
+type Neighbour = {
+  to: string;
+  path: string; 
+};
+
+type Graph = Record<
+  string,
+  {
+    id: string;
+    neighbors: Neighbour[];
+    coordinates: Coordinates[];
+    heroImage: string;
+    description?: string;
+  }
+>;
+
 interface MapContextType {
   userPoint: Coordinates | null;
   nearestPolygon: Feature<Polygon | MultiPolygon> | null;
@@ -16,6 +32,7 @@ interface MapContextType {
   } | null;
   setUserPoint: (pt: Coordinates) => void;
   setNearestPolygon: (f: Feature<Polygon | MultiPolygon>) => void;
+  polygonGraph: Graph;
 }
 
 const MapContext = createContext<MapContextType | undefined>(undefined);
