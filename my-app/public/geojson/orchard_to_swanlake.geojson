@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "orchard_to_swanlake",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": null, "length": 0.0028565944491954413 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.48474527263788, 43.73945039197551 ], [ -79.484245087170677, 43.737284410264813 ], [ -79.484182563987275, 43.737221887081411 ], [ -79.484044119795456, 43.737195091431381 ], [ -79.483869948070264, 43.737244216789769 ], [ -79.4836600488117, 43.737320137798186 ] ] ] } }
+]
+}
