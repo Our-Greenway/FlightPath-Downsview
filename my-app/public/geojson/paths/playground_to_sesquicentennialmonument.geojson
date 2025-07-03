@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "playground_to_sesquicentennialmonument",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": null, "length": 0.0010413912192713632 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.483342692539324, 43.743759060242411 ], [ -79.483176195832883, 43.743546197364559 ], [ -79.482954902742037, 43.743329119380213 ], [ -79.482756792736907, 43.743152084907543 ], [ -79.482647199968113, 43.743042492138741 ], [ -79.482615586669425, 43.743017201499789 ] ] ] } }
+]
+}

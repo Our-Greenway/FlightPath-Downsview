@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "keelediana_to_swanlake",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": null, "length": 0.0009295302409761503 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.485084666292451, 43.740904753890902 ], [ -79.484940282648097, 43.740233674980523 ], [ -79.484860973322327, 43.740003881293035 ] ] ] } }
+]
+}

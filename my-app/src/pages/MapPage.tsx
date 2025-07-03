@@ -88,6 +88,8 @@ function MapPage() {
         setUserPoint([coords[0], coords[1]]);
         setNearestPolygon(nearestFeature);
 
+
+
       });
 
     });

@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "sheppardkeele_to_northfarm",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": null, "length": 0.00043737346211534888 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.485838443815908, 43.744332679193768 ], [ -79.485784215217095, 43.744121187658379 ], [ -79.485759812347624, 43.743978837586475 ], [ -79.485757100917681, 43.743904273263098 ] ] ] } }
+]
+}

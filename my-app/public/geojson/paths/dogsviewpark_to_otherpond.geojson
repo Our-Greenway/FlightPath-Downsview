@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "dogsviewpark_to_otherpond",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "fid": 1, "length": 0.0001504036905693566 }, "geometry": { "type": "LineString", "coordinates": [ [ -79.478286433573061, 43.739399401880547 ], [ -79.478279824462575, 43.739475660847638 ], [ -79.478275248924561, 43.739549377849151 ] ] } }
+]
+}

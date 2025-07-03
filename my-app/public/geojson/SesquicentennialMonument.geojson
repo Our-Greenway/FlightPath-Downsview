@@ -2,6 +2,6 @@
 "type": "FeatureCollection",
 "name": "SesquicentennialMonument",
 "features": [
-{ "type": "Feature", "properties": { "id": "SesquicentennialMonument" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.482303592602918, 43.742932785544468 ], [ -79.482752005756126, 43.742660397643391 ], [ -79.48232372543859, 43.742442221974642 ], [ -79.48189361486294, 43.742640563524645 ], [ -79.482303592602918, 43.742932785544468 ] ] ] } }
+{ "type": "Feature", "properties": { "id": "SesquicentennialMonument", "neighbours": [ "LakeLookout_to_SesquicentennialMonument", "Playground_to_SesquicentennialMonument", "BoakesGrove_to_SesquicentennialMonument", "Hummingbird_to_SesquicentennialMonument", "KeeleDiana_to_SesquicentennialMonument", "KeeleWycombe_to_SesquicentennialMonument", "SesquicentennialMonument_to_SwanLake" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.482389279889077, 43.743133761016715 ], [ -79.482948463017649, 43.742830257016003 ], [ -79.482381922216319, 43.742478928142454 ], [ -79.482047148106446, 43.742710694833903 ], [ -79.482389279889077, 43.743133761016715 ] ] ] } }
 ]
 }

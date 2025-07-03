@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "KeeleDiana",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": "KeeleDiana", "neighbours": [ "KeeleDiana_to_SwanLake", "KeeleDiana_to_KeeleWycombe", "KeeleDiana_to_LakeLookout", "KeeleDiana_to_SesquicentennialMonument" ] }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -79.485099579156994, 43.741258595498223 ], [ -79.485100934871966, 43.741257239783252 ], [ -79.485037216268353, 43.740908821035845 ], [ -79.485397836450488, 43.740850525292117 ], [ -79.485472400773872, 43.741182675459875 ], [ -79.485099579156994, 43.741258595498223 ] ] ] ] } }
+]
+}
