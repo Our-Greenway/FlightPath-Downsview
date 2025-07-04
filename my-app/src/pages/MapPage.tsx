@@ -8,12 +8,9 @@ import { useMapContext, MapProvider } from '../context/MapContext';
 
 function MapPage() {
   const { setUserPoint, setNearestPolygon } = useMapContext();
-  const mapRef = useRef(null)
   const markerRef = useRef<Marker | null>(null)
   const circleRef = useRef<Circle | null>(null)
   
-  let minDist = Infinity;
-  let nearestFeature = null;
 
   useEffect(() => {
     const map = L.map('map').setView([43.8094086, -79.2696282], 13);
@@ -23,7 +20,24 @@ function MapPage() {
     }).addTo(map);
 
 
-    const files = ["Orchard.geojson", "UrbanFarm.geojson", "NorthFarm.geojson"];
+    const files = [
+      "BoakesGrove.geojson",
+      "DogsviewPark.geojson",
+      "FestivalTerrance.geojson",
+      "Hummingbird.geojson",
+      "LakeLookout.geojson",
+      "NorthFarm.geojson",
+      "NorthHill.geojson",
+      "Offices.geojson",
+      "Orchard.geojson",
+      "OtherPond.geojson",
+      "Playground.geojson",
+      "SesquicentennialMonument.geojson",
+      "SouthHill.geojson",
+      "SwanLake.geojson",
+      "UrbanFarm.geojson",
+      "KeeleWycombe.geojson",
+      "KeeleDiana.geojson"];
 
     const polygons: FeatureCollection<Polygon>= {
       type: "FeatureCollection",
@@ -86,7 +100,9 @@ function MapPage() {
           map.fitBounds(bounds, { padding: [50, 50] });
         }
         setUserPoint([coords[0], coords[1]]);
-        setNearestPolygon(nearestFeature);
+        if (nearestFeature) {
+          setNearestPolygon(nearestFeature);
+        }
 
 
 

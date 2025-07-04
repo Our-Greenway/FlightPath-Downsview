@@ -2,6 +2,6 @@
 "type": "FeatureCollection",
 "name": "SesquicentennialMonument",
 "features": [
-{ "type": "Feature", "properties": { "id": "SesquicentennialMonument", "neighbours": [ "LakeLookout_to_SesquicentennialMonument", "Playground_to_SesquicentennialMonument", "BoakesGrove_to_SesquicentennialMonument", "Hummingbird_to_SesquicentennialMonument", "KeeleDiana_to_SesquicentennialMonument", "KeeleWycombe_to_SesquicentennialMonument", "SesquicentennialMonument_to_SwanLake" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.482389279889077, 43.743133761016715 ], [ -79.482948463017649, 43.742830257016003 ], [ -79.482381922216319, 43.742478928142454 ], [ -79.482047148106446, 43.742710694833903 ], [ -79.482389279889077, 43.743133761016715 ] ] ] } }
+{ "type": "Feature", "properties": { "id": "SesquicentennialMonument", "heroImage": "/images/SesquicentennialMonument/heroImage.jpg", "neighbours": [ "LakeLookout_to_SesquicentennialMonument", "Playground_to_SesquicentennialMonument", "BoakesGrove_to_SesquicentennialMonument", "Hummingbird_to_SesquicentennialMonument", "KeeleDiana_to_SesquicentennialMonument", "KeeleWycombe_to_SesquicentennialMonument", "SesquicentennialMonument_to_SwanLake" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.482389279889077, 43.743133761016715 ], [ -79.482948463017649, 43.742830257016003 ], [ -79.482381922216319, 43.742478928142454 ], [ -79.482047148106446, 43.742710694833903 ], [ -79.482389279889077, 43.743133761016715 ] ] ] } }
 ]
 }

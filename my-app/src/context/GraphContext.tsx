@@ -2,7 +2,6 @@ import type { Feature, Polygon, MultiLineString, MultiPolygon, LineString } from
 
 type PolygonFeature = Feature<Polygon | MultiPolygon>;
 type Coordinates = [number, number];
-type PathFeature = Feature<LineString>;
 
 type PathMap = Record<string, number>;
 type Neighbour = {

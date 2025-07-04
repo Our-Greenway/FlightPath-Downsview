@@ -2,7 +2,6 @@ import { MapProvider } from './context/MapContext';
 import MapPage from './pages/MapPage';
 import InfoPanel from './pages/InfoPanel';
 import GraphTest from './pages/GraphTest';
-import React from 'react';
 
 function App() {
   return (

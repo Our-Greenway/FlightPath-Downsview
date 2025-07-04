@@ -31,7 +31,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     description: string;
   } | null>(null);
 
-  let distanceLine: Feature<LineString | MultiLineString> | null = null;
   useEffect(() => {
     if (!userPoint || !nearestPolygon) return;
   

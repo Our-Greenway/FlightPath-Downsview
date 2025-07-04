@@ -1,7 +1,7 @@
 import { useMapContext } from '../context/MapContext';
 
 const ApproachingPanel = () => {
-  const { userPoint, nearestPolygon, distance } = useMapContext();
+  const { nearestPolygon, distance } = useMapContext();
 
   const props = nearestPolygon?.properties;
   const heroImage = props?.heroImage;

@@ -2,6 +2,6 @@
 "type": "FeatureCollection",
 "name": "Playground",
 "features": [
-{ "type": "Feature", "properties": { "id": "Playground", "neighbours": [ "Playground_to_SesquicentennialMonument", "Playground_to_SheppardKeele" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.484301629266284, 43.744460875473358 ], [ -79.484466018419482, 43.744089946102044 ], [ -79.484086658835182, 43.743655790133353 ], [ -79.482374412423198, 43.743858784590827 ], [ -79.482138701915872, 43.744308048745438 ], [ -79.483269610841603, 43.744677602216456 ], [ -79.484301629266284, 43.744460875473358 ] ] ] } }
+{ "type": "Feature", "properties": { "id": "Playground","heroImage": "/images/Playground/heroImage.jpg", "neighbours": [ "Playground_to_SesquicentennialMonument", "Playground_to_SheppardKeele" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.484301629266284, 43.744460875473358 ], [ -79.484466018419482, 43.744089946102044 ], [ -79.484086658835182, 43.743655790133353 ], [ -79.482374412423198, 43.743858784590827 ], [ -79.482138701915872, 43.744308048745438 ], [ -79.483269610841603, 43.744677602216456 ], [ -79.484301629266284, 43.744460875473358 ] ] ] } }
 ]
 }

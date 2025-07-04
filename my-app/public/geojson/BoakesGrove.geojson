@@ -2,6 +2,6 @@
 "type": "FeatureCollection",
 "name": "BoakesGrove",
 "features": [
-{ "type": "Feature", "properties": { "id": "BoakesGrove", "neighbours": [ "BoakesGrove_to_LakeLookout", "BoakesGrove_to_SesquicentennialMonument" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.480903311270652, 43.743098923504789 ], [ -79.482337289102148, 43.74242760901825 ], [ -79.482437104761914, 43.741965730468522 ], [ -79.481884152107398, 43.741607103312191 ], [ -79.480519005211761, 43.741851598613067 ], [ -79.48070829028525, 43.742348874110007 ], [ -79.480903311270652, 43.743098923504789 ] ] ] } }
+{ "type": "Feature", "properties": { "id": "BoakesGrove","heroImage": "/images/BoakesGrove/heroImage.jpg",  "neighbours": [ "BoakesGrove_to_LakeLookout", "BoakesGrove_to_SesquicentennialMonument" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.480903311270652, 43.743098923504789 ], [ -79.482337289102148, 43.74242760901825 ], [ -79.482437104761914, 43.741965730468522 ], [ -79.481884152107398, 43.741607103312191 ], [ -79.480519005211761, 43.741851598613067 ], [ -79.48070829028525, 43.742348874110007 ], [ -79.480903311270652, 43.743098923504789 ] ] ] } }
 ]
 }
