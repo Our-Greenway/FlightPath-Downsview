@@ -1,11 +1,14 @@
-import { MapProvider } from './context/MapContext';
+import { MapProvider, useMapContext } from './context/MapContext';
 import MapPage from './pages/MapPage';
 import InfoPanel from './pages/InfoPanel';
 import GraphTest from './pages/GraphTest';
+import LocationPrompt from './pages/LocationPrompt';
 
-function App() {
+function AppContent() {
+  const { userPoint } = useMapContext();
+
   return (
-    <MapProvider>
+    <>
       <div className="flex w-screen h-screen">
         <div className="w-3/5 h-full">
           <MapPage />
@@ -15,6 +18,14 @@ function App() {
           <InfoPanel />
         </div>
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <MapProvider>
+      <AppContent />
     </MapProvider>
   );
 }

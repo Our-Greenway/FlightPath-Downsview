@@ -1,24 +1,22 @@
-import { useEffect, useRef } from 'react'
-import L, { Marker, Circle } from 'leaflet'
-import '../App.css'
+import { useEffect, useRef } from 'react';
+import L, { Marker, Circle } from 'leaflet';
+import '../App.css';
 import 'leaflet/dist/leaflet.css';
 import * as turf from '@turf/turf';
 import type { FeatureCollection, Feature, Polygon } from 'geojson';
-import { useMapContext, MapProvider } from '../context/MapContext';
+import { useMapContext } from '../context/MapContext';
 
 function MapPage() {
-  const { setUserPoint, setNearestPolygon } = useMapContext();
-  const markerRef = useRef<Marker | null>(null)
-  const circleRef = useRef<Circle | null>(null)
-  
+  const { userPoint, setNearestPolygon, setUserPoint } = useMapContext();
+  const markerRef = useRef<Marker | null>(null);
+  const circleRef = useRef<Circle | null>(null);
 
   useEffect(() => {
     const map = L.map('map').setView([43.8094086, -79.2696282], 13);
-    
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://carto.com/attributions">CartoDB</a>'
-    }).addTo(map);
 
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://carto.com/attributions">CartoDB</a>',
+    }).addTo(map);
 
     const files = [
       "BoakesGrove.geojson",
@@ -37,93 +35,65 @@ function MapPage() {
       "SwanLake.geojson",
       "UrbanFarm.geojson",
       "KeeleWycombe.geojson",
-      "KeeleDiana.geojson"];
+      "KeeleDiana.geojson"
+    ];
 
-    const polygons: FeatureCollection<Polygon>= {
+    const polygons: FeatureCollection<Polygon> = {
       type: "FeatureCollection",
       features: []
     };
-    Promise.all(
-      files.map(file =>
-        fetch(`/geojson/${file}`).then(res => res.json())
-      )
-    ).then(dataArray => {
+
+    Promise.all(files.map(file =>
+      fetch(`/geojson/${file}`).then(res => res.json())
+    )).then(dataArray => {
       dataArray.forEach(data => {
-        polygons.features.push(...data.features); 
-        L.geoJSON(data).addTo(map);              
+        polygons.features.push(...data.features);
+        L.geoJSON(data).addTo(map);
       });
-      
-      map.locate({ setView: true, maxZoom: 16, watch: true });
 
-      map.on("locationfound", function (e) {
-        const userPoint = turf.point([e.latlng.lng, e.latlng.lat]);
-        const coords = userPoint.geometry.coordinates; 
-        const latlng = L.latLng(coords[1], coords[0]);
-        const accuracy = e.accuracy;
+      if (userPoint) {
+        const pt = turf.point(userPoint);
 
+        let nearestFeature: Feature<Polygon> | null = null;
+        let minDist = Infinity;
+
+        for (const feature of polygons.features) {
+          const centre = turf.centroid(feature);
+          const dist = turf.distance(pt, centre);
+
+          if (dist < minDist) {
+            minDist = dist;
+            nearestFeature = feature;
+          }
+        }
+
+        if (nearestFeature) {
+          setNearestPolygon(nearestFeature);
+          const bounds = L.geoJSON(nearestFeature).getBounds();
+          map.fitBounds(bounds, { padding: [50, 50] });
+        }
+
+        const latlng = L.latLng(userPoint[1], userPoint[0]);
         if (!markerRef.current) {
           markerRef.current = L.marker(latlng).addTo(map);
         } else {
           markerRef.current.setLatLng(latlng);
         }
-        
+
         if (!circleRef.current) {
-          circleRef.current = L.circle(latlng, { radius: accuracy }).addTo(map);
+          circleRef.current = L.circle(latlng, { radius: 30 }).addTo(map);
         } else {
-          circleRef.current.setLatLng(latlng).setRadius(accuracy);
+          circleRef.current.setLatLng(latlng).setRadius(30);
         }
-
-
-      
-        let nearestFeature: Feature<Polygon> | null = null;
-        let minDist = Infinity;
-      
-        for (const feature of polygons.features) {
-          const centre = turf.centroid(feature);
-          const dist = turf.distance(userPoint, centre); 
-          console.log(nearestFeature);
-          
-          if (dist < minDist) {
-            minDist = dist;
-            nearestFeature = feature;
-          }
-        
-          console.log("Centroid valid:", centre?.geometry?.coordinates, "Distance:", dist);
-          console.log(nearestFeature);
-      
-        }
-      
-        console.log("Nearest polygon:", nearestFeature?.properties?.id || "none");
-      
-        if (nearestFeature) {
-          const bounds = L.geoJSON(nearestFeature).getBounds();
-          map.fitBounds(bounds, { padding: [50, 50] });
-        }
-        setUserPoint([coords[0], coords[1]]);
-        if (nearestFeature) {
-          setNearestPolygon(nearestFeature);
-        }
-
-
-
-      });
-
+      }
     });
 
-    
     return () => {
       map.remove();
     };
-  
-  }, []); 
+  }, [userPoint]); // triggers only if userPoint is set
 
-  return (
-    <>
-    <MapProvider>
-      <div id="map" style={{ height: "100vh", width: "66vw" }}></div> 
-    </MapProvider>
-    </>
-  )
+  return <div id="map" style={{ height: "100vh", width: "66vw" }}></div>;
 }
 
 export default MapPage;

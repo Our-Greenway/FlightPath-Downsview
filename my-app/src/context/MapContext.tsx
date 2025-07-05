@@ -32,6 +32,18 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   } | null>(null);
 
   useEffect(() => {
+    navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserPoint([longitude, latitude]);
+      },
+      (error) => {
+        console.error("Error getting user location:", error);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
     if (!userPoint || !nearestPolygon) return;
   
     let distanceLine: Feature<LineString | MultiLineString> | null = null;
