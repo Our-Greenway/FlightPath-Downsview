@@ -9,6 +9,7 @@ function AppContent() {
 
   return (
     <>
+      {!userPoint && <LocationPrompt />}
       <div className="flex w-screen h-screen">
         <div className="w-3/5 h-full">
           <MapPage />
