@@ -10,35 +10,36 @@ const ApproachingPanel = () => {
 
   return (
     <div className="rounded-lg h-screen overflow-hidden shadow-lg bg-white">
-      <div className="relative h-full w-full bg-gray-200 flex">
+      <div className="relative h-full w-full bg-gray-200">
         <div
-          className="w-[12%] bg-cover bg-center"
+          className="z-90 absolute inset-0 bg-cover bg-center w-[12%]"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
-
-        <div className="flex-grow relative">
-          <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-green-800" />
-          
-          <div className="relative z-10 flex flex-col justify-between text-white h-full">
-            {/* Approaching text */}
-            <div className="flex-grow flex items-center pl-10 break-words">
-              <div>
-                <p className="text-3xl font-medium">Approaching:</p>
-                <h1 className="text-4xl font-bold">{locationName}</h1>
+          <div className="absolute inset-0 flex flex-col justify-between text-white">
+
+          {/*Approaching text */}
+          <div className="flex-grow flex items-center pl-1 md:pl-15 lg:pl-30">
+            <div>
+              <p className="text-3xl font-medium">Approaching:</p>
+              <h1 className="text-4xl font-bold">{locationName}</h1>
+            </div>
+          </div>
+
+          {/* Distance */}
+          {dist !== null && (
+            <div className="w-full bg-black py-6">
+              <div className="text-white text-3xl pl-1 md:pl-15 lg:pl-30 font-bold">
+                In {dist}m
               </div>
             </div>
-
-            {/* Distance */}
-            {dist !== null && (
-              <div className="w-full bg-black py-10">
-                <div className="text-white text-3xl pb-10 pl-10 font-bold">
-                  In {dist}m
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
+          
+
+
+
       </div>
 
     </div>
