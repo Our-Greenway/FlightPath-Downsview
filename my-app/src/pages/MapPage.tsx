@@ -7,7 +7,7 @@ import type { FeatureCollection, Feature, Polygon } from 'geojson';
 import { useMapContext } from '../context/MapContext';
 
 function MapPage() {
-  const { userPoint, setNearestPolygon, setUserPoint } = useMapContext();
+  const { userPoint, setNearestPolygon } = useMapContext();
   const markerRef = useRef<Marker | null>(null);
   const circleRef = useRef<Circle | null>(null);
 
