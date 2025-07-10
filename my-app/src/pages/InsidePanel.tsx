@@ -1,4 +1,18 @@
 import { useMapContext } from '../context/MapContext';
+import { useEffect, useState } from 'react';
+import MenuBar from '../components/MenuBar';
+import { supabase } from '../supabase';
+import Description from '../components/Description';
+
+
+interface DescriptionInterface {
+  id: number;
+  location: string;
+  created_at: string;
+  feature: string;
+  image: string;
+  "bg-colour": string | null;
+}
 
 const InsidePanel = () => {
   const { userPoint, nearestPolygon } = useMapContext();
@@ -7,9 +21,28 @@ const InsidePanel = () => {
   const heroImage = props?.heroImage;
   const locationName = props?.id || 'Unknown Location';
 
+  
+  const [items, setItems] = useState<DescriptionInterface[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from('descriptions')
+        .select('*')
+        .eq('location', locationName);
+  
+      if (error) {
+        console.error(error);
+      } else {
+        setItems(data as DescriptionInterface[]); 
+      }
+    };
+  
+    fetchData();
+  }, []);
+
   return (
-    <div className="rounded-lg h-screen  overflow-hidden shadow-lg bg-white">
-      <div className="relative  p-25 w-full bg-gray-200">
+    <div className="rounded-lg h-screen  shadow-lg bg-white">
+      <div className="relative pt-35 pb-5 w-full bg-gray-200">
         {heroImage ? (
           <div
             className="absolute inset-0 bg-cover bg-center"
@@ -30,7 +63,11 @@ const InsidePanel = () => {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 pb-15 overflow-y-auto max-h-[200px]">
+        {items.map(item => (
+          <Description key={item.id} data={item} />
+        ))}
+        {/*
         <h3 className="text-lg font-semibold">User Location</h3>
         {userPoint ? (
           <p>Lat: {userPoint[1].toFixed(5)}, Lng: {userPoint[0].toFixed(5)}</p>
@@ -44,8 +81,14 @@ const InsidePanel = () => {
         ) : (
           <p className="text-gray-500">No polygon data</p>
         )}
+          */}
       </div>
+      
+    <div className="sticky bottom-0">
+      <MenuBar/>
     </div>
+    </div>
+    
   );
 };
 
