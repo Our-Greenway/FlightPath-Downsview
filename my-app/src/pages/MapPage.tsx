@@ -31,13 +31,28 @@ function MapPage() {
   };
   
   useEffect(() => {
-
     const map = L.map('map', mapOptions).setView([43.8094086, -79.2696282], 13);
-    
+    const mapContainer = map.getContainer();
+    let lastTap = 0;
 
     mapRef.current = map;
     
+    // Checks for double tap and allows browser to escape it without leaflet interference 
+    mapContainer.addEventListener('touchend', (e) => {
+      const now = new Date().getTime();
+      const timeSince = now - lastTap;
+      lastTap = now;
     
+      if (timeSince < 300) {
+        const zoom = map.getZoom();
+    
+        if (zoom > 17) {
+          e.stopImmediatePropagation();
+          e.preventDefault();
+        }
+      }
+    }, { passive: false }); 
+
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://carto.com/attributions">CartoDB</a>',
     }).addTo(map);
