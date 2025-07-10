@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import MenuBar from '../components/MenuBar';
 import { supabase } from '../supabase';
 import Description from '../components/Description';
+import { useOrientation } from '../context/Orientation';
 
 
 interface DescriptionInterface {
@@ -16,6 +17,7 @@ interface DescriptionInterface {
 
 const InsidePanel = () => {
   const { nearestPolygon } = useMapContext();
+  const orientation = useOrientation();
 
   const props = nearestPolygon?.properties;
   const heroImage = props?.heroImage;
@@ -41,7 +43,8 @@ const InsidePanel = () => {
   }, []);
 
   return (
-    <div className="rounded-lg h-screen  shadow-lg bg-white">
+    <div className="flex flex-col h-full bg-white">
+    <div className={`rounded-lg shadow-lg bg-white flex flex-col ${ orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full min-h-[50vh]'}`}>
       <div className="relative pt-35 pb-5 w-full bg-gray-200">
         {heroImage ? (
           <div
@@ -61,10 +64,11 @@ const InsidePanel = () => {
           <p className="text-lg font-medium">You are at:</p>
           <h1 className="text-3xl font-bold">{locationName}</h1>
         </div>
+        
       </div>
 
-      <div className="p-4 pb-15 overflow-y-auto max-h-[200px]">
-        {items.map(item => (
+      <div className="flex-1 overflow-y-auto p-4 pb-28">
+        {items.map((item) => (
           <Description key={item.id} data={item} />
         ))}
         {/*
@@ -87,7 +91,7 @@ const InsidePanel = () => {
     <div className="sticky bottom-0">
       <MenuBar/>
     </div>
-    </div>
+    </div></div>
     
   );
 };

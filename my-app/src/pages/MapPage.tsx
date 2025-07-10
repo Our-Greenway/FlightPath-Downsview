@@ -5,6 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import * as turf from '@turf/turf';
 import type { FeatureCollection, Feature, Polygon } from 'geojson';
 import { useMapContext } from '../context/MapContext';
+import { useOrientation } from '../context/Orientation';
+
 const customIcon = L.icon({
   iconUrl: "/LocationIcon.svg",
   iconSize: [25, 41],
@@ -14,13 +16,22 @@ const customIcon = L.icon({
 });
 
 
+
 function MapPage() {
   const { userPoint, setNearestPolygon } = useMapContext();
   const markerRef = useRef<Marker | null>(null);
   const circleRef = useRef<Circle | null>(null);
-  useEffect(() => {
-    const map = L.map('map').setView([43.8094086, -79.2696282], 13);
+  const orientation = useOrientation() as 'portrait' | 'landscape';
+  const prevOrientation = useRef<'portrait' | 'landscape' | null>(null);
 
+  
+  const mapRef = useRef<L.Map | null>(null);
+  
+  useEffect(() => {
+
+    const map = L.map('map').setView([43.8094086, -79.2696282], 13);
+    mapRef.current = map;
+    
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://carto.com/attributions">CartoDB</a>',
     }).addTo(map);
@@ -33,7 +44,6 @@ function MapPage() {
       "LakeLookout.geojson",
       "NorthFarm.geojson",
       "NorthHill.geojson",
-      "Offices.geojson",
       "Orchard.geojson",
       "OtherPond.geojson",
       "Playground.geojson",
@@ -94,12 +104,36 @@ function MapPage() {
       }
     });
 
+    
     return () => {
       map.remove();
     };
-  }, [userPoint]); // triggers only if userPoint is set
+  }, [userPoint]); 
+  
 
-  return <div id="map" style={{ height: "100vh", width: "66vw" }}></div>;
+  useEffect(() => {
+    if (
+      prevOrientation.current &&
+      prevOrientation.current !== orientation &&
+      mapRef.current
+    ) {
+      // Forces a refresh if the orientation is changed
+      setTimeout(() => {
+        mapRef.current?.invalidateSize();
+      }, 0);
+    }
+  
+    prevOrientation.current = orientation;
+  }, [orientation]);
+
+  return   <div
+    id="map"
+    className={`${
+      orientation === 'portrait'
+        ? 'w-screen h-[100%]'
+        : 'w-[100%] h-screen'
+    }`}
+  ></div>;
 }
 
 export default MapPage;

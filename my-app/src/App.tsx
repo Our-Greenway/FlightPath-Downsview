@@ -17,11 +17,11 @@ function AppContent() {
         <div className={orientation === "portrait" ? "h-1/2 w-full" : "h-full w-3/5"}>
           <MapPage />
         </div>
-        <div className={orientation === "portrait" ? "h-1/2 w-full" : "h-full w-2/5 z-10000"}>
+        <div style={{ zIndex: 10000 }} className={orientation === "portrait" ? " flex flex-col w-full flex-1 min-h-[50vh]" : "h-full w-2/5 "}>
           <InfoPanel />
         </div>
-        <GraphTest />
       </div>
+      <GraphTest />
     </>
   );
 }

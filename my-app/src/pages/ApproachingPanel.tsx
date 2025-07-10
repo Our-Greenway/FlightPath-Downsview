@@ -1,7 +1,10 @@
 import { useMapContext } from '../context/MapContext';
+import MenuBar from '../components/MenuBar';
+import { useOrientation } from '../context/Orientation';
 
 const ApproachingPanel = () => {
   const { nearestPolygon, distance } = useMapContext();
+  const orientation = useOrientation();
 
   const props = nearestPolygon?.properties;
   const heroImage = props?.heroImage;
@@ -9,8 +12,10 @@ const ApproachingPanel = () => {
   const dist = typeof distance === 'number' ? Math.round(distance * 1000) : null;
 
   return (
-    <div className="rounded-lg h-screen overflow-hidden shadow-lg bg-white">
-      <div className="relative h-full w-full bg-gray-200 flex">
+    
+    <div className="flex flex-col h-full bg-white">
+    <div className={`rounded-lg shadow-lg bg-white flex flex-col ${ orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full min-h-[50vh]'}`}>
+      <div className="flex flex-grow w-full bg-gray-200">
         <div
           className="w-[12%] bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -19,9 +24,9 @@ const ApproachingPanel = () => {
         <div className="flex-grow relative">
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-green-800" />
-          
+
           <div className="relative z-10 flex flex-col justify-between text-white h-full">
-            {/* Approaching text */}
+            {/* Approaching Text */}
             <div className="flex-grow flex items-center pl-10 break-words">
               <div>
                 <p className="text-3xl font-medium">Approaching:</p>
@@ -41,6 +46,10 @@ const ApproachingPanel = () => {
         </div>
       </div>
 
+      <div className="w-full">
+        <MenuBar />
+      </div>
+      </div>
     </div>
   );
 };

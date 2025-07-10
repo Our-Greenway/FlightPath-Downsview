@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 export function useOrientation() {
-  const getOrientation = () =>
+  const getOrientation = (): 'portrait' | 'landscape' =>
     window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
 
-  const [orientation, setOrientation] = useState(getOrientation);
+  const [orientation, setOrientation] = useState<'portrait' | 'landscape'>(getOrientation());
 
   useEffect(() => {
     const handleResize = () => {
