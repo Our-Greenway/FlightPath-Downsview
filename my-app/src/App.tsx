@@ -20,6 +20,7 @@ function AppContent() {
         <div className={orientation === "portrait" ? "h-1/2 w-full" : "h-full w-2/5 z-10000"}>
           <InfoPanel />
         </div>
+        <GraphTest />
       </div>
     </>
   );

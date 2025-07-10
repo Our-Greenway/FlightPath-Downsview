@@ -15,7 +15,7 @@ interface DescriptionInterface {
 }
 
 const InsidePanel = () => {
-  const { userPoint, nearestPolygon } = useMapContext();
+  const { nearestPolygon } = useMapContext();
 
   const props = nearestPolygon?.properties;
   const heroImage = props?.heroImage;
