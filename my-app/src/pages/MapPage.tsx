@@ -5,19 +5,19 @@ import 'leaflet/dist/leaflet.css';
 import * as turf from '@turf/turf';
 import type { FeatureCollection, Feature, Polygon } from 'geojson';
 import { useMapContext } from '../context/MapContext';
+const customIcon = L.icon({
+  iconUrl: "/LocationIcon.svg",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 
 function MapPage() {
   const { userPoint, setNearestPolygon } = useMapContext();
   const markerRef = useRef<Marker | null>(null);
   const circleRef = useRef<Circle | null>(null);
-  const customIcon = L.icon({
-    iconUrl: "./LocationIcon.svg",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-
   useEffect(() => {
     const map = L.map('map').setView([43.8094086, -79.2696282], 13);
 
