@@ -23,14 +23,20 @@ function MapPage() {
   const circleRef = useRef<Circle | null>(null);
   const orientation = useOrientation() as 'portrait' | 'landscape';
   const prevOrientation = useRef<'portrait' | 'landscape' | null>(null);
-
-  
   const mapRef = useRef<L.Map | null>(null);
+
+  const mapOptions: any = {
+    tap: false,
+    touchZoom: 'center',
+  };
   
   useEffect(() => {
 
-    const map = L.map('map').setView([43.8094086, -79.2696282], 13);
+    const map = L.map('map', mapOptions).setView([43.8094086, -79.2696282], 13);
+    
+
     mapRef.current = map;
+    
     
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://carto.com/attributions">CartoDB</a>',
