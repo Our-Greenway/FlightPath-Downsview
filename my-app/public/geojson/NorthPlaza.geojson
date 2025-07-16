@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "SheppardKeele",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature",  "properties": { "id": "NorthPlaza", "heroImage": "/images/NorthPlaza/heroImage.jpg", "neighbours": [ "Playground_to_NorthPlaza", "NorthFarm_to_NorthPlaza" ]}, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -79.486257000839572, 43.744734764130214 ], [ -79.486254263915001, 43.744734764130214 ], [ -79.485414028071986, 43.744871610358715 ], [ -79.485412659609707, 43.744645814081686 ], [ -79.4854222388457, 43.7444706509092 ], [ -79.485791723662658, 43.744344752378979 ], [ -79.486169419253329, 43.744314646208707 ], [ -79.486257000839572, 43.744734764130214 ] ] ] ] } }
+]
+}
