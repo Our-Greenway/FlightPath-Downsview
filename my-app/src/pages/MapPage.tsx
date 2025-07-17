@@ -62,18 +62,19 @@ function MapPage() {
       "DogsviewPark.geojson",
       "FestivalTerrance.geojson",
       "Hummingbird.geojson",
+      "KeeleDiana.geojson",
+      "KeeleWycombe.geojson",
       "LakeLookout.geojson",
+      "LowerPond.geojson",
+      "MiniMound.geojson",
+      "Mound.geojson",
       "NorthFarm.geojson",
-      "NorthHill.geojson",
+      "NorthPlaza.geojson",
       "Orchard.geojson",
-      "OtherPond.geojson",
       "Playground.geojson",
       "SesquicentennialMonument.geojson",
-      "SouthHill.geojson",
       "SwanLake.geojson",
-      "UrbanFarm.geojson",
-      "KeeleWycombe.geojson",
-      "KeeleDiana.geojson"
+      "UrbanFarm.geojson"
     ];
 
     const polygons: FeatureCollection<Polygon> = {

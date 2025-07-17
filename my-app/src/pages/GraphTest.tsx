@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import type { Feature, LineString, Polygon, MultiPolygon } from 'geojson';
-import { buildGraph } from "../context/GraphContext";
+import { dijkstra, reconstructPath, buildGraph } from "../context/GraphContext";
 
 type Coordinates = [number, number];
 
@@ -13,7 +13,7 @@ type Graph = Record<
   string,
   {
     id: string;
-    neighbors: Neighbour[];
+    neighbours: Neighbour[];
     coordinates: Coordinates[];
     heroImage?: string;
     description?: string;
@@ -26,49 +26,51 @@ const polygonFiles = [
   "DogsviewPark.geojson",
   "FestivalTerrance.geojson",
   "Hummingbird.geojson",
+  "KeeleDiana.geojson",
+  "KeeleWycombe.geojson",
   "LakeLookout.geojson",
+  "LowerPond.geojson",
+  "MiniMound.geojson",
+  "Mound.geojson",
   "NorthFarm.geojson",
-  "NorthHill.geojson",
-  "Offices.geojson",
+  "NorthPlaza.geojson",
   "Orchard.geojson",
-  "OtherPond.geojson",
   "Playground.geojson",
   "SesquicentennialMonument.geojson",
-  "SouthHill.geojson",
   "SwanLake.geojson",
-  "UrbanFarm.geojson",
-  "KeeleWycombe.geojson",
-  "KeeleDiana.geojson"
+  "UrbanFarm.geojson"
 ];
 
 const pathFiles = [
-    "boakesgrove_to_lakelookout.geojson",
-    "dogsviewpark_to_otherpond.geojson",
-    "dogsviewpark_to_southhill.geojson",
-    "hummingbird_to_northhill.geojson",
-    "keelediana_to_swanlake.geojson",
-    "keelewycombe_to_keelediana.geojson",
-    "lakelookout_to_keelediana.geojson",
-    "lakelookout_to_keelewycombe.geojson",
-    "lakelookout_to_sesquicentennialmonument.geojson",
-    "northfarm_to_keelewycombe.geojson",
-    "orchard_to_dogsviewpark.geojson",
-    "orchard_to_lakelookout.geojson",
-    "orchard_to_swanlake.geojson",
-    "orchard_to_urbanfarm.geojson",
-    "otherpond_to_northhill.geojson",
-    "playground_to_sesquicentennialmonument.geojson",
-    "sesquicentennialmonument_to_boakesgrove.geojson",
-    "sesquicentennialmonument_to_hummingbird.geojson",
-    "sesquicentennialmonument_to_keelediana.geojson",
-    "sesquicentennialmonument_to_keelewycombe.geojson",
-    "sheppardkeele_to_northfarm.geojson",
-    "sheppardkeele_to_playground.geojson",
-    "swanlake_to_keelewycombe.geojson",
-    "swanlake_to_lakelookout.geojson",
-    "swanlake_to_sesquicentennialmonument.geojson",
-    "urbanfarm_to_otherpond.geojson",
-    "urbanfarm_to_southhill.geojson"
+  "boakesgrove_to_lakelookout.geojson",
+  "dogsviewpark_to_lowerpond.geojson",
+  "dogsviewpark_to_minimound.geojson",
+  "hummingbird_to_mound.geojson",
+  "keelediana_to_swanlake.geojson",
+  "keelewycombe_to_keelediana.geojson",
+  "lakelookout_to_keelediana.geojson",
+  "lakelookout_to_keelewycombe.geojson",
+  "lakelookout_to_sesquicentennialmonument.geojson",
+  "lowerpond_to_mound.geojson",
+  "northfarm_to_keelewycombe.geojson",
+  "northplaza_to_northfarm.geojson",
+  "northplaza_to_playground.geojson",
+  "orchard_to_dogsviewpark.geojson",
+  "orchard_to_lakelookout.geojson",
+  "orchard_to_swanlake.geojson",
+  "orchard_to_urbanfarm.geojson",
+  "pathFiles.txt",
+  "playground_to_sesquicentennialmonument.geojson",
+  "sesquicentennialmonument_to_boakesgrove.geojson",
+  "sesquicentennialmonument_to_hummingbird.geojson",
+  "sesquicentennialmonument_to_keelediana.geojson",
+  "sesquicentennialmonument_to_keelewycombe.geojson",
+  "swanlake_to_keelewycombe.geojson",
+  "swanlake_to_lakelookout.geojson",
+  "swanlake_to_sesquicentennialmonument.geojson",
+  "urbanfarm_to_lowerpond.geojson",
+  "urbanfarm_to_minimound.geojson"
+
   ];
 
 
@@ -127,9 +129,19 @@ const GraphTest = () => {
       const graph: Graph = buildGraph(polygons, pathCollections);
       console.log('Built Graph:', graph);
 
+      const start = "Mound";
+      const end = "Orchard";
+      console.log(graph["MiniMound"].neighbours);
+
+      const result = dijkstra(graph, start);
+      const path = reconstructPath(result, end);
+
+      console.log(`→ Shortest path from ${start} to ${end}:`, path);
+      console.log(`→ Total distance:`, result[end]?.distance ?? "No path found");
+
       Object.entries(graph).forEach(([id, node]) => {
         console.log(`Node: ${id}`);
-        node.neighbors.forEach(n => {
+        node.neighbours.forEach(n => {
           const to = n.path.split('_to_')[1];
           console.log(`  → ${to} via ${n.path}, weight: ${n.weight}`);
         });
