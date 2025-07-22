@@ -120,6 +120,26 @@ const loadPathCollections = async (
   
     return result;
   };
+
+//Getter function to run dijkstras
+export const findPath = async (start: string, end: string) => {
+  const polygons = await loadPolygons('/geojson', polygonFiles);
+  const pathCollections = await loadPathCollections('/geojson/paths', pathFiles);
+
+  const graph: Graph = buildGraph(polygons, pathCollections);
+  const result = dijkstra(graph, start);
+  const path = reconstructPath(result, end);
+  const distance = result[end]?.distance ?? null;
+
+  return { path, distance };
+};
+
+//Helper function to get ids of the polys 
+export const getAllNodes = async (): Promise<string[]> => {
+  const polygons = await loadPolygons('/geojson', polygonFiles);
+  return polygons.map((f) => f.properties?.id).filter(Boolean);
+};
+
 const GraphTest = () => {
   useEffect(() => {
     const test = async () => {
