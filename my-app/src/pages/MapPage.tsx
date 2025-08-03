@@ -285,7 +285,7 @@ function MapPage() {
           </p>
           <p className="text-xs text-gray-600 mb-2">
             Distance: <span className="font-medium">
-              {pathFinder.distance ? `${(pathFinder.distance * 1000).toFixed(0)}m` : 'N/A'}
+              {pathFinder.distance ? `${(pathFinder.distance * 100000).toFixed(0)}m` : 'N/A'}
             </span>
           </p>
           <div className="flex items-center text-xs text-gray-500 space-x-3">

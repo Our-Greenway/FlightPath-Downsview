@@ -183,7 +183,7 @@ const PathFinder = () => {
           <p className="text-sm text-gray-700 mb-2">
             <strong>Total distance:</strong> {
               pathFinder.distance != null 
-                ? `${(pathFinder.distance * 10000).toFixed(2)} m` 
+                ? `${(pathFinder.distance * 100000).toFixed(2)} m` 
                 : "N/A"
             }
           </p>
