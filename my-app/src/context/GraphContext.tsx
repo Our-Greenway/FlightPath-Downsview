@@ -1,5 +1,6 @@
 import type { Feature, Polygon, MultiLineString, MultiPolygon, LineString } from 'geojson';
 
+
 type PolygonFeature = Feature<Polygon | MultiPolygon>;
 type Coordinates = [number, number];
 
@@ -58,7 +59,6 @@ export function buildGraph(polygons: PolygonFeature[], pathCollections: Record<s
       (pos: number[]): Coordinates => [pos[0], pos[1]]
     );
 
-    // Ensure node exists in graph
     if (!graph[id]) {
       graph[id] = {
         id,
@@ -69,7 +69,7 @@ export function buildGraph(polygons: PolygonFeature[], pathCollections: Record<s
       };
     }
 
-    // Add neighbours + reverse links
+    //add neighbours + reverse links
     for (const pathName of neighboursList) {
       const weight =
         pathLengths[pathName] ??
@@ -88,17 +88,17 @@ export function buildGraph(polygons: PolygonFeature[], pathCollections: Record<s
 
       const [from, to] = pathName.split("_to_");
 
-      // Forward edge with dedup guard
+      //forward edge with dedup guard
       if (!graph[id].neighbours.some(n => n.path === pathName)) {
         graph[id].neighbours.push({ path: pathName, weight });
       }
 
-      // Reverse edge (ensure 'to' exists)
+      //reverse edge (ensure 'to' exists)
       if (!graph[to]) {
         graph[to] = {
           id: to,
           neighbours: [],
-          coordinates: [], // unknown, unless you want to populate later
+          coordinates: [], 
         };
       }
 
@@ -119,12 +119,11 @@ export function dijkstra(graph: Graph, startId: string): Record<string, Dijkstra
   const previous: Record<string, string | null> = {};
   const visited: Set<string> = new Set();
 
-  // Set distances of all nodes to infinity 
+  // Set distances of all nodes to infinity and start to 0
   for (const nodeId in graph) {
     distances[nodeId] = Infinity;
     previous[nodeId] = null;
   }
-  // Set start id to 0
   distances[startId] = 0;
 
   const queue: [string, number][] = [[startId, 0]];

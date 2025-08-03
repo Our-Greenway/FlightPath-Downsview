@@ -1,52 +1,192 @@
-// pages/PathFinder.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { findPath, getAllNodes } from "../pages/GraphTest";
+import { useMapContext } from "../context/MapContext";
 
 const PathFinder = () => {
   const [nodes, setNodes] = useState<string[]>([]);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-  const [path, setPath] = useState<string[]>([]);
-  const [distance, setDistance] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+  
+  const processingRef = useRef(false);
+  const lastProcessedRef = useRef<string>("");
+  
+  const { 
+    pathFinder, 
+    setPathFinderResult, 
+    clearPathFinder, 
+    setPathFinderActive,
+    allPolygons
+  } = useMapContext();
+
+  // check if data loaded
+  useEffect(() => {
+    if (allPolygons && allPolygons.length > 0) {
+      setIsLoading(false);
+    }
+  }, [allPolygons]);
 
   useEffect(() => {
-    getAllNodes().then(setNodes);
-  }, []);
+    if (!isLoading) {
+      getAllNodes()
+        .then(setNodes)
+        .catch(error => {
+          console.error("Error loading nodes:", error);
+        });
+    }
+  }, [isLoading]);
 
-  const handleFindPath = async () => {
-    if (start && end) {
-      const { path, distance } = await findPath(start, end);
-      setPath(path);
-      setDistance(distance);
+  // avoids duplicate work via caching and to find paths
+  const handleFindPath = useCallback(async (startNode: string, endNode: string) => {
+    const pathKey = `${startNode}->${endNode}`;
+    
+    if (processingRef.current || lastProcessedRef.current === pathKey) {
+      return;
     }
-  };
+    
+    processingRef.current = true;
+    lastProcessedRef.current = pathKey;
+    setIsProcessing(true);
+    
+    try {
+      setPathFinderActive(true);
+      const { path, distance } = await findPath(startNode, endNode);
+      
+      await setPathFinderResult({
+        startNode,
+        endNode,
+        pathNodes: path,
+        distance
+      });
+    } catch (error) {
+      console.error("Error finding path:", error);
+      clearPathFinder();
+    } finally {
+      setIsProcessing(false);
+      processingRef.current = false;
+    }
+  }, [setPathFinderActive, setPathFinderResult, clearPathFinder]);
+
+  // rest vals
+  const handleClearPath = useCallback(() => {
+    setStart("");
+    setEnd("");
+    lastProcessedRef.current = "";
+    clearPathFinder();
+  }, [clearPathFinder]);
+
+  const handleManualFindPath = useCallback(async () => {
+    if (start && end && !isProcessing) {
+      await handleFindPath(start, end);
+    }
+  }, [start, end, handleFindPath, isProcessing]);
+
+  // only triggers if new (start, end) and if not curently handling
   useEffect(() => {
-    if (start && end) {
-      handleFindPath();
+    if (!start || !end) {
+      if (pathFinder.isActive) {
+        lastProcessedRef.current = "";
+        clearPathFinder();
+      }
+      return;
     }
+
+    if (start && end && !isProcessing && !processingRef.current) {
+      const pathKey = `${start}->${end}`;
+      
+      if (lastProcessedRef.current !== pathKey) {
+        const timeoutId = setTimeout(() => {
+          handleFindPath(start, end);
+        }, 100);
+
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [start, end, handleFindPath, isProcessing, pathFinder.isActive, clearPathFinder]);
+
+  useEffect(() => {
+    return () => {
+      processingRef.current = false;
+    };
   }, [start, end]);
 
+  if (isLoading) {
+    return (
+      <div className="p-4 bg-white rounded-lg shadow-md">
+        <h2 className="text-xl font-bold mb-4">Path Finder</h2>
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+          <p className="text-gray-600">Loading map data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div >
-      <h2>Path Finder</h2>
+    <div className="p-4 bg-white rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-4">Path Finder</h2>
 
       <div className="flex gap-4 mb-4">
-        <select className="border p-2" value={start} onChange={e => setStart(e.target.value)}>
+        <select 
+          className="border p-2 rounded" 
+          value={start} 
+          onChange={e => setStart(e.target.value)}
+          disabled={isProcessing}
+        >
           <option value="">Select start</option>
           {nodes.map(n => <option key={n} value={n}>{n}</option>)}
         </select>
 
-        <select className="border p-2" value={end} onChange={e => setEnd(e.target.value)}>
+        <select 
+          className="border p-2 rounded" 
+          value={end} 
+          onChange={e => setEnd(e.target.value)}
+          disabled={isProcessing}
+        >
           <option value="">Select end</option>
           {nodes.map(n => <option key={n} value={n}>{n}</option>)}
         </select>
 
+        <button 
+          onClick={handleManualFindPath}
+          disabled={!start || !end || isProcessing}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          {isProcessing ? "Finding..." : "Find Path"}
+        </button>
+
+        <button 
+          onClick={handleClearPath}
+          disabled={isProcessing}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          Clear
+        </button>
       </div>
 
-      {path.length > 0 && (
-        <div>
-          <p>Shortest path: {path.join(" → ")}</p>
-          <p><strong>Total distance:</strong> {distance != null ? (distance * 1000).toFixed(2) : "N/A"} m</p>
+      {isProcessing && (
+        <div className="bg-blue-50 p-4 rounded border border-blue-200 mb-4">
+          <div className="flex items-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+            <p className="text-sm text-blue-700">Finding path from {start} to {end}...</p>
+          </div>
+        </div>
+      )}
+
+      {pathFinder.isActive && pathFinder.pathNodes.length > 0 && !isProcessing && (
+        <div className="bg-green-50 p-4 rounded border border-green-200">
+          <h3 className="font-semibold text-green-800 mb-2">Route Found:</h3>
+          <p className="text-sm text-gray-700 mb-2">
+            <strong>Path:</strong> {pathFinder.pathNodes.join(" → ")}
+          </p>
+          <p className="text-sm text-gray-700 mb-2">
+            <strong>Total distance:</strong> {
+              pathFinder.distance != null 
+                ? `${(pathFinder.distance * 10000).toFixed(2)} m` 
+                : "N/A"
+            }
+          </p>
         </div>
       )}
     </div>
