@@ -266,12 +266,17 @@ function MapPage() {
       mapRef.current
     ) {
       setTimeout(() => {
-        mapRef.current?.invalidateSize();
-      }, 0);
+        if (mapRef.current) {
+          mapRef.current.invalidateSize();
+          const currentBounds = mapRef.current.getBounds();
+          mapRef.current.fitBounds(currentBounds);
+        }
+      }, 100);
     }
   
     prevOrientation.current = orientation;
   }, [orientation]);
+
 
   return (
     <div className="relative">
@@ -279,9 +284,13 @@ function MapPage() {
         id="map"
         className={`${
           orientation === 'portrait'
-            ? 'w-screen h-[100%]'
-            : 'w-[100%] h-screen'
+            ? 'w-screen h-screen'
+            : 'w-screen h-screen' 
         }`}
+        style={{
+          width: '100vw',
+          height: '100vh'
+        }}
       />
       
       {/* Reset view overlay */}
@@ -295,7 +304,7 @@ function MapPage() {
         <div className="absolute top-4 right-4 bg-white p-3 rounded-lg shadow-lg max-w-sm z-[1000]">
           <h4 className="font-semibold text-sm mb-2">Active Route</h4>
           <p className="text-xs text-gray-600 mb-1">
-            From: <span className="font-medium text-green-600">{pathFinder.startNode}</span>
+            From: <span className="font-medium text-[#3A5F3A]">{pathFinder.startNode}</span>
           </p>
           <p className="text-xs text-gray-600 mb-1">
             To: <span className="font-medium text-red-600">{pathFinder.endNode}</span>
@@ -307,7 +316,7 @@ function MapPage() {
           </p>
           <div className="flex items-center text-xs text-gray-500 space-x-3">
             <div className="flex items-center">
-              <div className="w-3 h-3 bg-green-500 rounded mr-1"></div>Start
+              <div className="w-3 h-3 bg-[#3A5F3A] rounded mr-1"></div>Start
             </div>
             <div className="flex items-center">
               <div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>Route
