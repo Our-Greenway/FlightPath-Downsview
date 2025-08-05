@@ -1,5 +1,5 @@
 import { MapProvider, useMapContext } from './context/MapContext';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MapPage from './pages/MapPage';
 import InfoPanel from './pages/InfoPanel';
 import GraphTest from './pages/GraphTest';

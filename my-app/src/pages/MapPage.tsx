@@ -7,8 +7,12 @@ import type { FeatureCollection, Feature, Polygon, MultiPolygon, LineString } fr
 import { useMapContext } from '../context/MapContext';
 import { useOrientation } from '../context/Orientation';
 
+const DEFAULT_LAT = 43.7439869729327;
+const DEFAULT_LNG = -79.4841983609762;
+const DEFAULT_ZOOM = 15;
+
 const customIcon = L.icon({
-  iconUrl: "/LocationIcon.svg",
+  iconUrl: "./LocationIcon.svg",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -33,10 +37,17 @@ function MapPage() {
     touchZoom: 'center',
   };
 
+  const resetToDefaultView = () => {
+    if (mapRef.current) {
+      mapRef.current.setView([DEFAULT_LAT, DEFAULT_LNG], DEFAULT_ZOOM);
+    }
+  };
+
   useEffect(() => {
     if (mapRef.current) return; 
 
-    const map = L.map('map', mapOptions).setView([43.8094086, -79.2696282], 13);
+    const map = L.map('map', mapOptions).setView([DEFAULT_LAT, DEFAULT_LNG], DEFAULT_ZOOM);
+    console.log('userPoint:', userPoint);
     const mapContainer = map.getContainer();
     let lastTap = 0;
 
@@ -272,6 +283,12 @@ function MapPage() {
             : 'w-[100%] h-screen'
         }`}
       />
+      
+      {/* Reset view overlay */}
+      <button onClick={resetToDefaultView} className="absolute bottom-4 left-4 bg-white hover:bg-gray-50 text-gray-700 p-3 rounded-lg shadow-lg z-[1000] transition-colors duration-200 flex items-center space-x-2" title="Reset to default view">
+      <i className="fas fa-refresh"></i>
+        <span className="text-sm font-medium">Reset View</span>
+      </button>
       
       {/* Route info overlay */}
       {pathFinder.isActive && pathFinder.pathNodes.length > 0 && (

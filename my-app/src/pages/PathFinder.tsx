@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { findPath, getAllNodes } from "../pages/GraphTest";
 import { useMapContext } from "../context/MapContext";
-
+import MenuBar from "../components/MenuBar";
 const PathFinder = () => {
   const [nodes, setNodes] = useState<string[]>([]);
   const [start, setStart] = useState("");
@@ -124,10 +124,14 @@ const PathFinder = () => {
   }
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Path Finder</h2>
+    <div className="flex flex-col h-full bg-white">
 
-      <div className="flex gap-4 mb-4">
+    <div className="pt-8 pb-8 pl-4 bg-[#3A5F3A] w-full">
+      <h1 className="text-xl font-bold text-white">Path Finder</h1>
+    </div>
+    <div className="p-4 h-full bg-white rounded-lg shadow-md">
+
+    <div className="flex flex-col gap-4 mb-4 sm:flex-row">
         <select 
           className="border p-2 rounded" 
           value={start} 
@@ -148,10 +152,12 @@ const PathFinder = () => {
           {nodes.map(n => <option key={n} value={n}>{n}</option>)}
         </select>
 
+      </div>
+      <div className="flex gap-4 mb-4">
         <button 
           onClick={handleManualFindPath}
           disabled={!start || !end || isProcessing}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="!bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           {isProcessing ? "Finding..." : "Find Path"}
         </button>
@@ -159,7 +165,7 @@ const PathFinder = () => {
         <button 
           onClick={handleClearPath}
           disabled={isProcessing}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="!bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
           Clear
         </button>
@@ -189,6 +195,11 @@ const PathFinder = () => {
           </p>
         </div>
       )}
+      
+    </div>
+    <div className="sticky bottom-0">
+      <MenuBar/>
+    </div>
     </div>
   );
 };
