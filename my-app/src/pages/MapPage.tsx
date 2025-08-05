@@ -3,7 +3,7 @@ import L, { Marker, Circle, LayerGroup } from 'leaflet';
 import '../App.css';
 import 'leaflet/dist/leaflet.css';
 import * as turf from '@turf/turf';
-import type { FeatureCollection, Feature, Polygon, MultiPolygon, LineString } from 'geojson';
+import type {Feature, Polygon, MultiPolygon } from 'geojson';
 import { useMapContext } from '../context/MapContext';
 import { useOrientation } from '../context/Orientation';
 
