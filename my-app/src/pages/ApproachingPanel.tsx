@@ -14,10 +14,10 @@ const ApproachingPanel = () => {
   return (
     
 <div className="flex flex-col h-full">
-  <div className={`rounded-lg shadow-lg bg-white flex flex-col w-full ${ orientation === 'landscape' ? '' :}`}
-    style={{ height: orientation === 'landscape' ? '100dvh' : 'auto',  }} >
+<div className={`rounded-lg shadow-lg bg-white flex flex-col w-full ${orientation === 'landscape' ? '' : 'h-[10vh]'}`}
+  style={{ height: orientation === 'landscape' ? '100dvh' : 'auto' }} >
     <div className="flex flex-grow w-full bg-gray-200 min-h-0 overflow-hidden">
-      <div className="w-[12%] bg-cover bg-center" style={{ backgroundImage: `url(${heroImage})` }}/>
+      <div className="w-[12%] bg-cover bg-center" style={{ backgroundImage: `url(${heroImage})` }}> </div>
 
       <div className="flex-grow relative">
         <div className="absolute inset-0 bg-black/40" />
