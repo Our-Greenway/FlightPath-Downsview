@@ -1,22 +1,36 @@
-
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-const MenuBar = () => {  
+
+const MenuBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const isPathfinder = location.pathname === "/pathfinder";
-  const buttonLabel = isPathfinder ? "Go to Navigation" : "Go to Pathfinder";
+  const defaultLabel = isPathfinder ? "Go to Navigation" : "Go to Pathfinder";
   const targetPath = isPathfinder ? "/" : "/pathfinder";
-  
-    return (
-      <div className="sticky bottom-0 bg-gray-800 ">
-        <div className="flex justify-between border-t p-2 flex ">
-          <img src="/OurGreenwayCombinationMarkHorizontalWhite.svg" alt="Our Greenway Logo" className="max-h-11"/>
-          <button className="px-2 bg-gray-300 text-black rounded" onClick={() => navigate(targetPath)}>
-            {buttonLabel}
-          </button>
-        </div>
+
+  const [isShort, setIsShort] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsShort(window.innerHeight < 650);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <div className="sticky bottom-0 bg-gray-800 z-50">
+      <div className="flex gap-3 justify-between items-center border-t border-gray-700 p-2">
+        <img src="/OurGreenwayCombinationMarkHorizontalWhite.svg" alt="Our Greenway Logo" className="max-h-11"/>
+        <button className="px-3 py-1 bg-gray-300 text-black font-semibold rounded"onClick={() => navigate(targetPath)} >
+          {isShort ? "Pathfinder" : defaultLabel}
+        </button>
       </div>
-    );
-  }
-export default MenuBar  
+    </div>
+  );
+};
+
+export default MenuBar;

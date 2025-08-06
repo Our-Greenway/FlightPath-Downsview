@@ -7,10 +7,12 @@ const InfoPanel = () => {
 
 
   return (
-    <div className="rounded-lg overflow-hidden shadow-lg bg-white">
+  <div className="rounded-lg overflow-hidden shadow-lg bg-white flex flex-col min-h-[50vh] max-h-[100dvh]">
+    <div className="flex-grow overflow-y-auto">
       {isInside === true && <InsidePanel />}
       {isInside === false && <ApproachingPanel />}
     </div>
+  </div>
   );
 };
 

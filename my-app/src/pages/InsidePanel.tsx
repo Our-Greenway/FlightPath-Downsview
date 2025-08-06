@@ -44,8 +44,8 @@ const InsidePanel = () => {
 
   return (
     <div className="flex flex-col h-full bg-white">
-    <div className={`rounded-lg shadow-lg bg-white flex flex-col ${ orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full min-h-[50vh]'}`}>
-      <div className="relative pt-35 pb-5 w-full bg-gray-200">
+    <div className={`rounded-lg shadow-lg bg-white flex flex-col ${ orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full'}`}>
+      <div className="relative pt-28 pb-5 w-full bg-gray-200">
         {heroImage ? (
           <div
             className="absolute inset-0 bg-cover bg-center"
@@ -71,6 +71,18 @@ const InsidePanel = () => {
         {items.map((item) => (
           <Description key={item.id} data={item} />
         ))}
+      </div>
+      
+    <div className="sticky bottom-0">
+      <MenuBar/>
+    </div>
+    </div></div>
+    
+  );
+};
+
+export default InsidePanel;
+
         {/*
         <h3 className="text-lg font-semibold">User Location</h3>
         {userPoint ? (
@@ -86,14 +98,3 @@ const InsidePanel = () => {
           <p className="text-gray-500">No polygon data</p>
         )}
           */}
-      </div>
-      
-    <div className="sticky bottom-0">
-      <MenuBar/>
-    </div>
-    </div></div>
-    
-  );
-};
-
-export default InsidePanel;

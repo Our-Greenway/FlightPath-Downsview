@@ -17,8 +17,7 @@ type Graph = Record<
     coordinates: Coordinates[];
     heroImage?: string;
     description?: string;
-  }
->;
+  }>;
 
 // Static files
 const polygonFiles = [
