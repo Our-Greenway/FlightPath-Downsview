@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { findPath, getAllNodes } from "../pages/GraphTest";
 import { useMapContext } from "../context/MapContext";
 import MenuBar from "../components/MenuBar";
+import { useOrientation } from '../context/Orientation';
+
 const PathFinder = () => {
   const [nodes, setNodes] = useState<string[]>([]);
   const [start, setStart] = useState("");
@@ -11,6 +13,7 @@ const PathFinder = () => {
   
   const processingRef = useRef(false);
   const lastProcessedRef = useRef<string>("");
+  const orientation = useOrientation();
   
   const { 
     pathFinder, 
@@ -124,83 +127,60 @@ const PathFinder = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-white">
-
-    <div className="pt-8 pb-8 pl-4 bg-[#3A5F3A] w-full">
-      <h1 className="text-xl font-bold text-white">Path Finder</h1>
-    </div>
-    <div className="p-4 h-full bg-white rounded-lg shadow-md">
-
-    <div className="flex flex-col gap-4 mb-4 sm:flex-row">
-        <select 
-          className="border p-2 rounded" 
-          value={start} 
-          onChange={e => setStart(e.target.value)}
-          disabled={isProcessing}
-        >
-          <option value="">Select start</option>
-          {nodes.map(n => <option key={n} value={n}>{n}</option>)}
-        </select>
-
-        <select 
-          className="border p-2 rounded" 
-          value={end} 
-          onChange={e => setEnd(e.target.value)}
-          disabled={isProcessing}
-        >
-          <option value="">Select end</option>
-          {nodes.map(n => <option key={n} value={n}>{n}</option>)}
-        </select>
-
-      </div>
-      <div className="flex gap-4 mb-4">
-        <button 
-          onClick={handleManualFindPath}
-          disabled={!start || !end || isProcessing}
-          className="!bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          {isProcessing ? "Finding..." : "Find Path"}
-        </button>
-
-        <button 
-          onClick={handleClearPath}
-          disabled={isProcessing}
-          className="!bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-          Clear
-        </button>
-      </div>
-
-      {isProcessing && (
-        <div className="bg-blue-50 p-4 rounded border border-blue-200 mb-4">
-          <div className="flex items-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
-            <p className="text-sm text-blue-700">Finding path from {start} to {end}...</p>
+    <div className={`rounded-lg shadow-lg bg-white w-full overflow-hidden ${orientation === 'landscape' ? 'h-full' : 'sticky bottom-0 h-[50vh] max-h-[100dvh]'}`}>
+    <div className="flex flex-col h-full">
+      <div className={`${orientation === 'landscape' ? 'flex-grow' : 'h-full overflow-y-auto overflow-x-hidden'}`}>
+        <div className="pt-4 pb-4 md:pt-8 md:pb-8 pl-4 bg-[#3A5F3A] w-full">
+          <h1 className="text-xl font-bold text-white">Path Finder</h1>
+        </div>
+  
+        <div className="p-4 bg-white">
+          <div className="flex flex-wrap gap-4 mb-4 sm:flex-row">
+            <select className="border p-2 rounded min-w-[150px]" value={start} onChange={e => setStart(e.target.value)} disabled={isProcessing}>
+              <option value="">Select start</option>
+              {nodes.map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+  
+            <select className="border p-2 rounded min-w-[150px]" value={end} onChange={e => setEnd(e.target.value)} disabled={isProcessing}>
+              <option value="">Select end</option>
+              {nodes.map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
           </div>
+  
+          <div className="flex flex-wrap gap-4 mb-4">
+            <button onClick={handleManualFindPath} disabled={!start || !end || isProcessing} className="!bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+              {isProcessing ? "Finding..." : "Find Path"}
+            </button>
+  
+            <button onClick={handleClearPath} disabled={isProcessing} className="!bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+              Clear
+            </button>
+          </div>
+  
+          {isProcessing && (
+            <div className="bg-blue-50 p-4 rounded border border-blue-200 mb-4">
+              <div className="flex items-center">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+                <p className="text-sm text-blue-700">Finding path from {start} to {end}...</p>
+              </div>
+            </div>
+          )}
+  
+          {pathFinder.isActive && pathFinder.pathNodes.length > 0 && !isProcessing && (
+            <div className="bg-green-50 p-4 rounded border border-green-200">
+              <h3 className="font-semibold text-green-800 mb-2">Route Found:</h3>
+              <p className="text-sm text-gray-700 mb-2"><strong>Path:</strong> {pathFinder.pathNodes.join(" → ")}</p>
+              <p className="text-sm text-gray-700 mb-2"><strong>Total distance:</strong> {pathFinder.distance != null ? `${(pathFinder.distance * 100000).toFixed(2)} m` : "N/A"}</p>
+            </div>
+          )}
         </div>
-      )}
-
-      {pathFinder.isActive && pathFinder.pathNodes.length > 0 && !isProcessing && (
-        <div className="bg-green-50 p-4 rounded border border-green-200">
-          <h3 className="font-semibold text-green-800 mb-2">Route Found:</h3>
-          <p className="text-sm text-gray-700 mb-2">
-            <strong>Path:</strong> {pathFinder.pathNodes.join(" → ")}
-          </p>
-          <p className="text-sm text-gray-700 mb-2">
-            <strong>Total distance:</strong> {
-              pathFinder.distance != null 
-                ? `${(pathFinder.distance * 100000).toFixed(2)} m` 
-                : "N/A"
-            }
-          </p>
-        </div>
-      )}
-      
+      </div>
+  
+      <div className={`${orientation === 'landscape' ? 'w-full border-t' : 'sticky bottom-0 w-full bg-white border-t'}`}>
+        <MenuBar />
+      </div>
     </div>
-    <div className="sticky bottom-0">
-      <MenuBar/>
-    </div>
-    </div>
+  </div>
   );
 };
 
