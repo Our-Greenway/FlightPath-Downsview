@@ -25,7 +25,7 @@ const MenuBar = () => {
     <div className="sticky bottom-0 bg-gray-800 z-50">
       <div className="flex gap-3 justify-between items-center border-t border-gray-700 p-2">
         <img src="/OurGreenwayCombinationMarkHorizontalWhite.svg" alt="Our Greenway Logo" className="max-h-11"/>
-        <button className="px-3 py-1 bg-gray-300 text-black font-semibold rounded"onClick={() => navigate(targetPath)} >
+        <button className="appearance-none px-3 py-1 bg-gray-300 text-black font-semibold rounded"onClick={() => navigate(targetPath)} >
           {isShort ? "Pathfinder" : defaultLabel}
         </button>
       </div>

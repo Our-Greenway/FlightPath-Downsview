@@ -136,12 +136,12 @@ const PathFinder = () => {
   
         <div className="p-4 bg-white">
           <div className="flex flex-wrap gap-4 mb-4 sm:flex-row">
-            <select className="border p-2 rounded min-w-[150px]" value={start} onChange={e => setStart(e.target.value)} disabled={isProcessing}>
+            <select className="border p-2 rounded min-w-[150px] appearance-none" value={start} onChange={e => setStart(e.target.value)} disabled={isProcessing}>
               <option value="">Select start</option>
               {nodes.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
   
-            <select className="border p-2 rounded min-w-[150px]" value={end} onChange={e => setEnd(e.target.value)} disabled={isProcessing}>
+            <select className="border p-2 rounded min-w-[150px] appearance-none" value={end} onChange={e => setEnd(e.target.value)} disabled={isProcessing}>
               <option value="">Select end</option>
               {nodes.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
