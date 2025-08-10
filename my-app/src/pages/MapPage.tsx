@@ -282,14 +282,8 @@ function MapPage() {
     <div className="relative">
       <div
         id="map"
-        className={`${
-          orientation === 'portrait'
-            ? 'w-screen h-screen'
-            : 'w-screen h-screen' 
-        }`}
         style={{
-          width: '100vw',
-          height: '100vh'
+          height: orientation === 'landscape' ? '100dvh' : '50dvh'
         }}
       />
       
