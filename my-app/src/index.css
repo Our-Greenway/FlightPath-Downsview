@@ -67,6 +67,20 @@ button:focus-visible {
   }
 }
 
+@media screen and (max-width: 768px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  body {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+}
+
 @supports (padding-top: env(safe-area-inset-top)) {
   .pt-safe-top {
     padding-top: env(safe-area-inset-top);
