@@ -127,7 +127,11 @@ const PathFinder = () => {
   }
 
   return (
-    <div className={`rounded-lg shadow-lg bg-white w-full overflow-hidden ${orientation === 'landscape' ? 'h-full' : 'sticky bottom-0 h-[50vh] max-h-[100dvh]'}`}>
+    <div className={`rounded-lg shadow-lg bg-white w-full overflow-hidden ${ orientation === 'landscape'  ? 'h-full'  : 'sticky bottom-0 max-h-[100dvh]'}`}
+    style={{
+      height: orientation === 'portrait' ? 'calc(50vh - env(safe-area-inset-bottom, 0px))' : '100%',
+      paddingBottom: orientation === 'portrait' ? 'env(safe-area-inset-bottom, 0px)' : '0'
+    }}>
     <div className="flex flex-col h-full">
       <div className={`${orientation === 'landscape' ? 'flex-grow' : 'h-full overflow-y-auto overflow-x-hidden'}`}>
         <div className="pt-4 pb-4 md:pt-8 md:pb-8 pl-4 bg-[#3A5F3A] w-full">
