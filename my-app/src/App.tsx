@@ -6,21 +6,12 @@ import GraphTest from './pages/GraphTest';
 import LocationPrompt from './pages/LocationPrompt';
 import { useOrientation } from './context/Orientation';
 import PathFinder from './pages/PathFinder';
-import { useEffect } from 'react';
 
 function MapLayout({ children }: { children: React.ReactNode }) {
   const orientation = useOrientation();
   const { userPoint } = useMapContext();
 
   if (!userPoint) return <LocationPrompt />;
-  
-  useEffect(() => {
-    const handleOrientation = () => {
-      window.scrollTo(0, 0); 
-    };
-    window.addEventListener("orientationchange", handleOrientation);
-    return () => window.removeEventListener("orientationchange", handleOrientation);
-  }, []);
 
   return (
     <>
