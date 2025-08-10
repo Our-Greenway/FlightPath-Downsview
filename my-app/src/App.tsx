@@ -15,11 +15,11 @@ function MapLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className={`flex w-screen h-screen ${orientation === "portrait" ? "flex-col" : "flex-row"}`}>
+      <div className={`flex w-full overflow-hidden ${orientation === "portrait" ? "flex-col" : "flex-row"}`} style={{ height: '100dvh', width: '100dvw' }}>
         <div className={orientation === "portrait" ? "h-1/2 w-full" : "h-full w-3/5"}>
           <MapPage />
         </div>
-        <div style={{ zIndex: 10000 }} className={orientation === "portrait" ? "flex flex-col w-full flex-1 min-h-[50vh]" : "h-full w-2/5"}>
+        <div className={`relative z-[10000] ${orientation === "portrait" ? "w-full flex flex-col min-h-[50vh]" : "h-full w-2/5"}`}>
           {children}
         </div>
       </div>
