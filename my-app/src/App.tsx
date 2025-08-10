@@ -6,12 +6,34 @@ import GraphTest from './pages/GraphTest';
 import LocationPrompt from './pages/LocationPrompt';
 import { useOrientation } from './context/Orientation';
 import PathFinder from './pages/PathFinder';
+import { useEffect } from 'react';
 
 function MapLayout({ children }: { children: React.ReactNode }) {
   const orientation = useOrientation();
   const { userPoint } = useMapContext();
 
   if (!userPoint) return <LocationPrompt />;
+
+
+  useEffect(() => {
+    if (orientation === "portrait") {
+      (document.body.style as any).zoom = "1";
+      
+      let viewport = document.querySelector('meta[name="viewport"]') as HTMLMetaElement;
+      if (!viewport) {
+        viewport = document.createElement('meta');
+        viewport.name = 'viewport';
+        document.head.appendChild(viewport);
+      }
+      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+      
+      window.scrollTo(0, 0);
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 100);
+    }
+  }, [orientation]);
+
 
   return (
     <>
