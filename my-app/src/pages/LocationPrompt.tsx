@@ -23,7 +23,7 @@ const LocationPrompt = () => {
 
   return (
   <div className="z-10001 fixed top-0 left-0 w-full h-full bg-black/70 z-50">
-    <div className="flex flex-col md:flex-row items-center justify-center gap-8 h-full p-8 text-white">
+    <div className="flex flex-col md:flex-row items-start justify-center gap-8 h-full max-h-full overflow-y-auto p-8 text-white">
       <div className="max-w-md">
         <h1 className="text-xl font-bold mb-4">Welcome to FlightPath Downsview!</h1>
         <p className="mb-4">
@@ -33,7 +33,7 @@ const LocationPrompt = () => {
           To get started, click on the button below. This program requires a GPS-enabled device.
         </p>
         <button
-          className="bg-gray-200 text-black dark:bg-gray-200 dark:text-black text-black font-semibold px-4 py-2 rounded"
+          className="!bg-white !text-black font-semibold px-4 py-2 rounded"
           onClick={requestLocation}
         >
           Allow Location Access

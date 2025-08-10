@@ -288,7 +288,7 @@ function MapPage() {
       />
       
       {/* Reset view overlay */}
-      <button onClick={resetToDefaultView} className="absolute bottom-4 left-4 bg-white hover:bg-gray-50 text-gray-700 p-3 rounded-lg shadow-lg z-[1000] transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none" title="Reset to default view">
+      <button onClick={resetToDefaultView} className="absolute bottom-4 left-4 !bg-white !text-black hover:bg-gray-50 text-gray-700 p-3 rounded-lg shadow-lg z-[1000] transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none" title="Reset to default view">
         <i className="fas fa-refresh"></i>
         <span className="text-sm font-medium">Reset View</span>
       </button>
