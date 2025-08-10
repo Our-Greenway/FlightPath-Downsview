@@ -15,7 +15,7 @@ function MapLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className={`flex w-full overflow-hidden pt-safe-top pb-safe-bottom ${orientation === "portrait" ? "flex-col" : "flex-row"}`} style={{ height: '100dvh', width: '100dvw' }}>
+      <div className={`flex w-full overflow-hidden pt-safe-top pb-safe-bottom ${orientation === "portrait" ? "flex-col" : "flex-row"}`} style={{ height: '100dvh', width: '100dvw', position: 'fixed', top: 0, left: 0}}>
         <div className={orientation === "portrait" ? "h-1/2 w-full" : "h-full w-3/5"}>
           <MapPage />
         </div>
