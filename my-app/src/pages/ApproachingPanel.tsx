@@ -18,7 +18,7 @@ const ApproachingPanel = () => {
       <div className="w-[12%] bg-cover bg-center" style={{ backgroundImage: `url(${heroImage})` }}></div>
       <div className="flex-grow relative">
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 bg-green-800" />
+        <div className="absolute inset-0 bg-[#3A5F3A]" />
         <div className="relative z-10 flex flex-col justify-between text-white h-full">
           <div className="flex flex-grow pt-3 pb-3 items-center pl-10 break-words">
             <div>

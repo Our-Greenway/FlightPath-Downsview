@@ -1,8 +1,10 @@
 
 import { useMapContext } from '../context/MapContext';
+import { useOrientation } from '../context/Orientation';
 
 const LocationPrompt = () => {
   const { setUserPoint } = useMapContext();
+  const orientation = useOrientation();
 
   const requestLocation = () => {
     navigator.geolocation.watchPosition(
@@ -23,9 +25,9 @@ const LocationPrompt = () => {
 
   return (
   <div className="z-10001 fixed top-0 left-0 w-full h-full bg-black/70 z-50">
-    <div className="flex flex-col md:flex-row items-start justify-center gap-8 h-full max-h-full overflow-y-auto p-8 text-white">
+    <div className={`flex flex-col md:flex-row ${orientation === "portrait" ? "items-start" : "items-center justify-center"}  gap-8 h-full max-h-full overflow-y-auto p-8 text-white`}>
       <div className="max-w-md">
-        <h1 className="text-xl font-bold mb-4">Welcome to FlightPath Downsview!</h1>
+        <h1 className={`text-xl font-bold mb-4 ${orientation === "portrait" ? "pt-5" : " "}`}>Welcome to FlightPath Downsview!</h1>
         <p className="mb-4">
           FlightPath Downsview is a navigation tool built by Our Greenway for trishaw and bicycle rides in the Downsview Park area. It includes a path-finding feature and a visual guide to local attractions, designed with accessibility in mind for users who are visually impaired.
         </p>

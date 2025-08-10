@@ -6,6 +6,7 @@ import * as turf from '@turf/turf';
 import type {Feature, Polygon, MultiPolygon } from 'geojson';
 import { useMapContext } from '../context/MapContext';
 import { useOrientation } from '../context/Orientation';
+import { useState } from 'react';
 
 const DEFAULT_LAT = 43.7439869729327;
 const DEFAULT_LNG = -79.4841983609762;
@@ -26,6 +27,7 @@ function MapPage() {
   const orientation = useOrientation() as 'portrait' | 'landscape';
   const prevOrientation = useRef<'portrait' | 'landscape' | null>(null);
   const mapRef = useRef<L.Map | null>(null);
+  const [routeInfoCollapsed, setRouteInfoCollapsed] = useState(false);
   
   // Layer groups for organizing map content
   const normalLayersRef = useRef<LayerGroup | null>(null);
@@ -294,38 +296,53 @@ function MapPage() {
       </button>
       
       {/* Route info overlay */}
-      {pathFinder.isActive && pathFinder.pathNodes.length > 0 && (
-        <div className="absolute top-4 right-4 bg-white p-3 rounded-lg shadow-lg max-w-sm z-[1000]">
-          <h4 className="font-semibold text-sm mb-2">Active Route</h4>
-          <p className="text-xs text-gray-600 mb-1">
-            From: <span className="font-medium text-[#3A5F3A]">{pathFinder.startNode}</span>
-          </p>
-          <p className="text-xs text-gray-600 mb-1">
-            To: <span className="font-medium text-red-600">{pathFinder.endNode}</span>
-          </p>
-          <p className="text-xs text-gray-600 mb-2">
-            Distance: <span className="font-medium">
-              {pathFinder.distance ? `${(pathFinder.distance * 100000).toFixed(0)}m` : 'N/A'}
-            </span>
-          </p>
-          <div className="flex items-center text-xs text-gray-500 space-x-3">
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-[#3A5F3A] rounded mr-1"></div>Start
+    {pathFinder.isActive && pathFinder.pathNodes.length > 0 && (
+      <div className={`absolute top-4 right-4 bg-white rounded-lg shadow-lg max-w-sm z-[1000] transition-all duration-300 ${routeInfoCollapsed ? 'p-2' : 'p-3'}`}>
+        {!routeInfoCollapsed ? (
+          <>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="!text-gray-900 font-semibold text-sm">Active Route</h4>
+              <button onClick={() => setRouteInfoCollapsed(true)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <i className="fas fa-chevron-down w-4 h-4"></i>
+              </button>
             </div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>Route
+            <p className="text-xs text-gray-600 mb-1">
+              From: <span className="font-medium text-[#3A5F3A]">{pathFinder.startNode}</span>
+            </p>
+            <p className="text-xs text-gray-600 mb-1">
+              To: <span className="font-medium text-red-600">{pathFinder.endNode}</span>
+            </p>
+            <p className="text-xs text-gray-600 mb-2">
+              Distance: <span className="font-medium">
+                {pathFinder.distance ? `${(pathFinder.distance * 100000).toFixed(0)}m` : 'N/A'}
+              </span>
+            </p>
+            <div className="flex items-center text-xs text-gray-500 space-x-3">
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-[#3A5F3A] rounded mr-1"></div>Start
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>Route
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 bg-red-500 rounded mr-1"></div>End
+              </div>
             </div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-red-500 rounded mr-1"></div>End
+            <div className="mt-2 pt-2 border-t border-gray-200">
+              <div className="flex items-center text-xs text-gray-500">
+                <div className="w-6 h-1 bg-yellow-400 mr-2"></div>Route Path
+              </div>
             </div>
+          </>
+        ) : (
+          <div className="flex items-center justify-between">
+            <button onClick={() => setRouteInfoCollapsed(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <i className="fas fa-chevron-up w-4 h-4"></i>
+            </button>
           </div>
-          <div className="mt-2 pt-2 border-t border-gray-200">
-            <div className="flex items-center text-xs text-gray-500">
-              <div className="w-6 h-1 bg-yellow-400 mr-2"></div>Route Path
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
+    )}
     </div>
   );
 }

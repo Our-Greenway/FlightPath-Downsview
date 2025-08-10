@@ -57,8 +57,7 @@ const InsidePanel = () => {
           </div>
         )}
         <div className="absolute inset-0 bg-black/40" />
-
-  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-green-800/50 to-green-900" />
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#3A5F3A] to-green-900" />
 
         <div className="absolute bottom-0 w-full p-4 bg-opacity-80 text-white">
           <p className="text-lg font-medium">You are at:</p>
