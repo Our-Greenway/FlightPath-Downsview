@@ -127,60 +127,60 @@ const PathFinder = () => {
   }
 
   return (
-    <div className={`rounded-lg shadow-lg bg-white w-full overflow-hidden ${orientation === 'landscape' ? 'h-[100dvh]' : 'sticky bottom-0 h-[50vh] max-h-[100dvh]'}`}>
     <div className="flex flex-col h-full">
-      <div className={`${orientation === 'landscape' ? 'flex-grow' : 'h-full overflow-y-auto overflow-x-hidden'}`}>
-        <div className="pt-4 pb-4 md:pt-8 md:pb-8 pl-4 bg-[#3A5F3A] w-full">
-          <h1 className="text-xl font-bold text-white">Path Finder</h1>
-        </div>
-  
-        <div className="p-4 bg-white">
-          <div className="flex flex-wrap gap-4 mb-4 sm:flex-row">
-            <select className="bg-white dark:bg-white border p-2 rounded min-w-[150px]" value={start} onChange={e => setStart(e.target.value)} disabled={isProcessing}>
-              <option value="">Select start</option>
-              {nodes.map(n => <option key={n} value={n}>{n}</option>)}
-            </select>
-  
-            <select className="bg-white dark:bg-white border p-2 rounded min-w-[150px]" value={end} onChange={e => setEnd(e.target.value)} disabled={isProcessing}>
-              <option value="">Select end</option>
-              {nodes.map(n => <option key={n} value={n}>{n}</option>)}
-            </select>
-          </div>
-  
-          <div className="flex flex-wrap gap-4 mb-4">
-            <button onClick={handleManualFindPath} disabled={!start || !end || isProcessing} className="!bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
-              {isProcessing ? "Finding..." : "Find Path"}
-            </button>
-  
-            <button onClick={handleClearPath} disabled={isProcessing} className="!bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
-              Clear
-            </button>
-          </div>
-  
-          {isProcessing && (
-            <div className="bg-blue-50 p-4 rounded border border-blue-200 mb-4">
-              <div className="flex items-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
-                <p className="text-sm text-blue-700">Finding path from {start} to {end}...</p>
-              </div>
-            </div>
-          )}
-  
-          {pathFinder.isActive && pathFinder.pathNodes.length > 0 && !isProcessing && (
-            <div className="bg-green-50 p-4 rounded border border-green-200">
-              <h3 className="font-semibold text-green-800 mb-2">Route Found:</h3>
-              <p className="text-sm text-gray-700 mb-2"><strong>Path:</strong> {pathFinder.pathNodes.join(" → ")}</p>
-              <p className="text-sm text-gray-700 mb-2"><strong>Total distance:</strong> {pathFinder.distance != null ? `${(pathFinder.distance * 100000).toFixed(2)} m` : "N/A"}</p>
-            </div>
-          )}
-        </div>
+    <div className={`${orientation === 'landscape' ? 'flex-grow overflow-y-auto' : 'flex-grow overflow-y-auto overflow-x-hidden min-h-0'}`}>
+      <div className="pt-4 pb-4 md:pt-8 md:pb-8 pl-4 bg-[#3A5F3A] w-full">
+        <h1 className="text-xl font-bold text-white">Path Finder</h1>
       </div>
-  
-      <div className="w-full">
+
+      <div className="p-4 bg-white">
+        <div className="flex flex-wrap gap-4 mb-4 sm:flex-row">
+          <select className="bg-white border border-gray-300 p-2 rounded min-w-[150px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer" value={start} onChange={e => setStart(e.target.value)} disabled={isProcessing}>
+            <option value="">Select start</option>
+            {nodes.map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+
+          <select className="bg-white border border-gray-300 p-2 rounded min-w-[150px] text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer" value={end} onChange={e => setEnd(e.target.value)} disabled={isProcessing}>
+            <option value="">Select end</option>
+            {nodes.map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </div>
+
+        <div className="flex flex-wrap gap-4 mb-4">
+          <button onClick={handleManualFindPath} disabled={!start || !end || isProcessing} className="!bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+            {isProcessing ? "Finding..." : "Find Path"}
+          </button>
+
+          <button onClick={handleClearPath} disabled={isProcessing} className="!bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+            Clear
+          </button>
+        </div>
+
+        {isProcessing && (
+          <div className="bg-blue-50 p-4 rounded border border-blue-200 mb-4">
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+              <p className="text-sm text-blue-700">Finding path from {start} to {end}...</p>
+            </div>
+          </div>
+        )}
+
+        {pathFinder.isActive && pathFinder.pathNodes.length > 0 && !isProcessing && (
+          <div className="bg-green-50 p-4 rounded border border-green-200">
+            <h3 className="font-semibold text-green-800 mb-2">Route Found:</h3>
+            <p className="text-sm text-gray-700 mb-2"><strong>Path:</strong> {pathFinder.pathNodes.join(" → ")}</p>
+            <p className="text-sm text-gray-700 mb-2"><strong>Total distance:</strong> {pathFinder.distance != null ? `${(pathFinder.distance * 100000).toFixed(2)} m` : "N/A"}</p>
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Fixed bottom bar with proper spacing */}
+    <div className="w-full flex-shrink-0 pb-safe">
       <MenuBar />
     </div>
-    </div>
   </div>
+
   );
 };
 
