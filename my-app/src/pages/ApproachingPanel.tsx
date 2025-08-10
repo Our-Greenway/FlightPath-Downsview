@@ -11,7 +11,6 @@ const ApproachingPanel = () => {
   const locationName = props?.id || 'Unknown Location';
   const dist = typeof distance === 'number' ? Math.round(distance * 1000) : null;
 
-
   return (
 <div className="flex flex-grow h-[50dvh]">
   <div className={`rounded-lg shadow-lg bg-white flex flex-col w-full ${orientation === 'landscape' ? '' : 'h-[50vh] sticky bottom-0 overflow-hidden max-h-[100dvh]'}`} style={{ height: orientation === 'landscape' ? '100dvh' : 'auto' }}>
