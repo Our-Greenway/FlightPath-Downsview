@@ -43,7 +43,7 @@ const InsidePanel = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-[50dvh] bg-white">
     <div className={`rounded-lg shadow-lg bg-white flex flex-col ${ orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full'}`}>
       <div className="relative pt-28 pb-5 w-full bg-gray-200">
         {heroImage ? (

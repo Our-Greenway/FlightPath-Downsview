@@ -12,7 +12,7 @@ const ApproachingPanel = () => {
   const dist = typeof distance === 'number' ? Math.round(distance * 1000) : null;
 
   return (
-<div className="flex flex-col h-full">
+<div className="flex flex-grow h-[50dvh]">
   <div className={`rounded-lg shadow-lg bg-white flex flex-col w-full ${orientation === 'landscape' ? '' : 'h-[50vh] sticky bottom-0 overflow-hidden max-h-[100dvh]'}`} style={{ height: orientation === 'landscape' ? '100dvh' : 'auto' }}>
     <div className={`${orientation === 'landscape' ? '' : 'overflow-y-auto flex-grow'} flex flex-grow w-full bg-gray-200 min-h-0`}>
       <div className="w-[12%] bg-cover bg-center" style={{ backgroundImage: `url(${heroImage})` }}></div>

@@ -33,7 +33,7 @@ const LocationPrompt = () => {
           To get started, click on the button below. This program requires a GPS-enabled device.
         </p>
         <button
-          className="bg-white text-black font-semibold px-4 py-2 rounded"
+          className="bg-gray-200 text-black dark:bg-gray-200 dark:text-black text-black font-semibold px-4 py-2 rounded"
           onClick={requestLocation}
         >
           Allow Location Access
