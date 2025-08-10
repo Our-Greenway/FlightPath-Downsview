@@ -6,46 +6,21 @@ import GraphTest from './pages/GraphTest';
 import LocationPrompt from './pages/LocationPrompt';
 import { useOrientation } from './context/Orientation';
 import PathFinder from './pages/PathFinder';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 function MapLayout({ children }: { children: React.ReactNode }) {
   const orientation = useOrientation();
   const { userPoint } = useMapContext();
-  const previousOrientation = useRef(orientation);
 
   if (!userPoint) return <LocationPrompt />;
-
-
   
   useEffect(() => {
-    if (previousOrientation.current === "landscape" && orientation === "portrait") {
-      const resetZoom = () => {
-        if (window.visualViewport) {
-          try {
-            document.documentElement.style.setProperty('--zoom-reset', '1');
-            window.scrollTo(0, 0);
-          } catch (e) {
-            console.log('visualViewport method failed');
-          }
-        }
-        
-        const viewport = document.querySelector('meta[name="viewport"]');
-        if (viewport) {
-          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes');
-          
-          requestAnimationFrame(() => {
-            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=3.0, user-scalable=yes');
-          });
-        }
-      };
-      
-      resetZoom();
-    }
-    
-    previousOrientation.current = orientation;
-  }, [orientation]);
- 
-
+    const handleOrientation = () => {
+      window.scrollTo(0, 0); 
+    };
+    window.addEventListener("orientationchange", handleOrientation);
+    return () => window.removeEventListener("orientationchange", handleOrientation);
+  }, []);
 
   return (
     <>
