@@ -127,7 +127,7 @@ const PathFinder = () => {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className={`fixed flex flex-col ${orientation === 'landscape' ? 'h-[100dvh]' : 'h-[50dvh]'}`}>
     <div className={`${orientation === 'landscape' ? 'flex-grow overflow-y-auto' : 'flex-grow overflow-y-auto overflow-x-hidden min-h-0'}`}>
       <div className="pt-4 pb-4 md:pt-8 md:pb-8 pl-4 bg-[#3A5F3A] w-full">
         <h1 className="text-xl font-bold text-white">Path Finder</h1>
