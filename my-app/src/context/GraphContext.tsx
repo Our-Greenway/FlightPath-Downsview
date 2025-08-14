@@ -39,13 +39,15 @@ export function buildGraph(polygons: PolygonFeature[], pathCollections: Record<s
     pathLengths[pathName] = totalLength;
   }
 
-  // Loop through all polygon nodes and build the graph
+  // Create all nodes from polygon features only
+  const validNodeIds = new Set<string>();
   for (const feature of polygons) {
     const props = feature.properties || {};
     const id = props.id;
-    const neighboursList = props.neighbours;
 
-    if (!id || !Array.isArray(neighboursList)) continue;
+    if (!id) continue;
+    
+    validNodeIds.add(id);
 
     const heroImage = props.heroImage;
     const description = props.description || "";
@@ -59,18 +61,31 @@ export function buildGraph(polygons: PolygonFeature[], pathCollections: Record<s
       (pos: number[]): Coordinates => [pos[0], pos[1]]
     );
 
-    if (!graph[id]) {
-      graph[id] = {
-        id,
-        neighbours: [],
-        coordinates,
-        heroImage,
-        description,
-      };
-    }
+    graph[id] = {
+      id,
+      neighbours: [],
+      coordinates,
+      heroImage,
+      description,
+    };
+  }
 
-    //add neighbours + reverse links
+  //  Add neighbors only if both nodes exist as valid polygons
+  for (const feature of polygons) {
+    const props = feature.properties || {};
+    const id = props.id;
+    const neighboursList = props.neighbours;
+
+    if (!id || !Array.isArray(neighboursList)) continue;
+
     for (const pathName of neighboursList) {
+      const [from, to] = pathName.split("_to_");
+      
+      if (!validNodeIds.has(from) || !validNodeIds.has(to)) {
+        console.warn(`Skipping path ${pathName}: one or both nodes don't exist as polygons`);
+        continue;
+      }
+
       const weight =
         pathLengths[pathName] ??
         pathLengths[pathName.toLowerCase()] ??
@@ -86,25 +101,13 @@ export function buildGraph(polygons: PolygonFeature[], pathCollections: Record<s
           ) || ""
         ] ?? Infinity;
 
-      const [from, to] = pathName.split("_to_");
-
-      //forward edge with dedup guard
+      // Forward edge with dedup guard
       if (!graph[id].neighbours.some(n => n.path === pathName)) {
         graph[id].neighbours.push({ path: pathName, weight });
       }
 
-      //reverse edge (ensure 'to' exists)
-      if (!graph[to]) {
-        graph[to] = {
-          id: to,
-          neighbours: [],
-          coordinates: [], 
-        };
-      }
-
+      // Reverse edge with dedup guard (only if 'to' node exists)
       const reversePath = `${to}_to_${from}`;
-
-      //Reverse edge with dedup guard
       if (!graph[to].neighbours.some(n => n.path === reversePath)) {
         graph[to].neighbours.push({ path: reversePath, weight });
       }
@@ -148,6 +151,7 @@ export function dijkstra(graph: Graph, startId: string): Record<string, Dijkstra
     if (!currentNode){
       continue
     }
+    console.log(`Processing node: ${currentId}, neighbors:`, currentNode.neighbours.map(n => n.path));
 
     for (const neighbor of currentNode.neighbours) {
       const neighboursID = neighbor.path.split('_to_')[1];

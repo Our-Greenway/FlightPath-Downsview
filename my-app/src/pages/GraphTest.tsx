@@ -23,7 +23,6 @@ type Graph = Record<
 const polygonFiles = [
   "BoakesGrove.geojson",
   "DogsviewPark.geojson",
-  "FestivalTerrance.geojson",
   "Hummingbird.geojson",
   "KeeleDiana.geojson",
   "KeeleWycombe.geojson",
@@ -42,33 +41,33 @@ const polygonFiles = [
 
 const pathFiles = [
   "boakesgrove_to_lakelookout.geojson",
-  "dogsviewpark_to_lowerpond.geojson",
-  "dogsviewpark_to_minimound.geojson",
-  "hummingbird_to_mound.geojson",
-  "keelediana_to_swanlake.geojson",
-  "keelewycombe_to_keelediana.geojson",
-  "lakelookout_to_keelediana.geojson",
-  "lakelookout_to_keelewycombe.geojson",
-  "lakelookout_to_sesquicentennialmonument.geojson",
-  "lowerpond_to_mound.geojson",
-  "northfarm_to_keelewycombe.geojson",
-  "northplaza_to_northfarm.geojson",
-  "northplaza_to_playground.geojson",
-  "orchard_to_dogsviewpark.geojson",
-  "orchard_to_lakelookout.geojson",
-  "orchard_to_swanlake.geojson",
-  "orchard_to_urbanfarm.geojson",
-  "pathFiles.txt",
-  "playground_to_sesquicentennialmonument.geojson",
-  "sesquicentennialmonument_to_boakesgrove.geojson",
-  "sesquicentennialmonument_to_hummingbird.geojson",
-  "sesquicentennialmonument_to_keelediana.geojson",
-  "sesquicentennialmonument_to_keelewycombe.geojson",
-  "swanlake_to_keelewycombe.geojson",
-  "swanlake_to_lakelookout.geojson",
-  "swanlake_to_sesquicentennialmonument.geojson",
-  "urbanfarm_to_lowerpond.geojson",
-  "urbanfarm_to_minimound.geojson"
+"dogsviewpark_to_lowerpond.geojson",
+"dogsviewpark_to_minimound.geojson",
+"hummingbird_to_mound.geojson",
+"keelediana_to_swanlake.geojson",
+"keelewycombe_to_keelediana.geojson",
+"lakelookout_to_keelediana.geojson",
+"lakelookout_to_keelewycombe.geojson",
+"lakelookout_to_sesquicentennialmonument.geojson",
+"lowerpond_to_minimound.geojson",
+"lowerpond_to_mound.geojson",
+"northfarm_to_keelewycombe.geojson",
+"northplaza_to_northfarm.geojson",
+"northplaza_to_playground.geojson",
+"orchard_to_dogsviewpark.geojson",
+"orchard_to_lakelookout.geojson",
+"orchard_to_swanlake.geojson",
+"orchard_to_urbanfarm.geojson",
+"playground_to_sesquicentennialmonument.geojson",
+"sesquicentennialmonument_to_boakesgrove.geojson",
+"sesquicentennialmonument_to_hummingbird.geojson",
+"sesquicentennialmonument_to_keelediana.geojson",
+"sesquicentennialmonument_to_keelewycombe.geojson",
+"swanlake_to_keelewycombe.geojson",
+"swanlake_to_lakelookout.geojson",
+"swanlake_to_sesquicentennialmonument.geojson",
+"urbanfarm_to_lowerpond.geojson",
+"urbanfarm_to_minimound.geojson"
 
   ];
 
@@ -129,6 +128,7 @@ export const findPath = async (start: string, end: string) => {
   const result = dijkstra(graph, start);
   const path = reconstructPath(result, end);
   const distance = result[end]?.distance ?? null;
+  console.log(result)
 
   return { path, distance };
 };

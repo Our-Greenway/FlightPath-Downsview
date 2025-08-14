@@ -100,6 +100,7 @@ function MapPage() {
       );
 
       routePolygons.forEach(polygon => {
+        console.log(polygon);
         const isStart = polygon.properties?.id === pathFinder.startNode;
         const isEnd = polygon.properties?.id === pathFinder.endNode;
         

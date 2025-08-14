@@ -2,6 +2,6 @@
 "type": "FeatureCollection",
 "name": "Hummingbird",
 "features": [
-{ "type": "Feature", "properties": { "id": "Hummingbird", "heroImage": "/images/Hummingbird/heroImage.jpg", "neighbours": [ "Hummingbird_to_NorthHill", "Hummingbird_to_SesquicentennialMonument" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.481409022820401, 43.744243999480744 ], [ -79.481494020710159, 43.744035221038814 ], [ -79.481487964977859, 43.743521878253993 ], [ -79.480685978648708, 43.743740769018139 ], [ -79.479830649192152, 43.743781236218233 ], [ -79.480423047297919, 43.744403653092149 ], [ -79.480825370643075, 43.744256280543169 ], [ -79.481409022820401, 43.744243999480744 ] ] ] } }
+{ "type": "Feature", "properties": { "id": "Hummingbird", "heroImage": "/images/Hummingbird/heroImage.jpg", "neighbours": [ "Hummingbird_to_Mound", "Hummingbird_to_SesquicentennialMonument" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.481409022820401, 43.744243999480744 ], [ -79.481494020710159, 43.744035221038814 ], [ -79.481487964977859, 43.743521878253993 ], [ -79.480685978648708, 43.743740769018139 ], [ -79.479830649192152, 43.743781236218233 ], [ -79.480423047297919, 43.744403653092149 ], [ -79.480825370643075, 43.744256280543169 ], [ -79.481409022820401, 43.744243999480744 ] ] ] } }
 ]
 }

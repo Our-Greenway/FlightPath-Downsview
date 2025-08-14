@@ -23,6 +23,7 @@ const PathFinder = () => {
     allPolygons
   } = useMapContext();
 
+  
   // check if data loaded
   useEffect(() => {
     if (allPolygons && allPolygons.length > 0) {

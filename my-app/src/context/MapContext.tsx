@@ -47,6 +47,7 @@ const MapContext = createContext<MapContextType | undefined>(undefined);
 
 // Helper functions to load geojson data
 const loadPolygons = async (basePath: string, files: string[]) => {
+  
   const polygons: Feature<Polygon | MultiPolygon>[] = [];
 
   for (const file of files) {
@@ -152,6 +153,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         "lakelookout_to_keelediana.geojson",
         "lakelookout_to_keelewycombe.geojson",
         "lakelookout_to_sesquicentennialmonument.geojson",
+        "lowerpond_to_minimound.geojson",
         "lowerpond_to_mound.geojson",
         "northfarm_to_keelewycombe.geojson",
         "northplaza_to_northfarm.geojson",
