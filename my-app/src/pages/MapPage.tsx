@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import L, { Marker, Circle, LayerGroup } from 'leaflet';
 import '../App.css';
 import 'leaflet/dist/leaflet.css';
@@ -6,7 +6,6 @@ import * as turf from '@turf/turf';
 import type {Feature, Polygon, MultiPolygon } from 'geojson';
 import { useMapContext } from '../context/MapContext';
 import { useOrientation } from '../context/Orientation';
-import { useState } from 'react';
 
 const DEFAULT_LAT = 43.7439869729327;
 const DEFAULT_LNG = -79.4841983609762;
@@ -20,13 +19,29 @@ const customIcon = L.icon({
   shadowSize: [41, 41]
 });
 
+const trackingIcon = L.icon({
+  iconUrl: "./LocationIcon.svg",
+  iconSize: [30, 46],
+  iconAnchor: [15, 46],
+  popupAnchor: [1, -34],
+  shadowSize: [46, 46],
+  className: 'location-tracking-icon'
+});
+
 function MapPage() {
-  const { userPoint, setNearestPolygon, pathFinder, allPolygons, allPaths } = useMapContext();
+  const { setNearestPolygon, pathFinder, allPolygons, allPaths } = useMapContext();
   const markerRef = useRef<Marker | null>(null);
   const circleRef = useRef<Circle | null>(null);
+  const accuracyCircleRef = useRef<Circle | null>(null);
   const orientation = useOrientation() as 'portrait' | 'landscape';
   const prevOrientation = useRef<'portrait' | 'landscape' | null>(null);
   const mapRef = useRef<L.Map | null>(null);
+  const watchIdRef = useRef<number | null>(null);
+  
+  const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
+  const [locationAccuracy, setLocationAccuracy] = useState<number | null>(null);
+  const [isTrackingLocation, setIsTrackingLocation] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
   const [routeInfoCollapsed, setRouteInfoCollapsed] = useState(false);
   
   // Layer groups for organizing map content
@@ -45,11 +60,81 @@ function MapPage() {
     }
   };
 
+  const handleLocationSuccess = useCallback((position: GeolocationPosition) => {
+    const { latitude, longitude, accuracy } = position.coords;
+    const newPosition: [number, number] = [longitude, latitude];
+    
+    setUserPosition(newPosition);
+    setLocationAccuracy(accuracy);
+    setLocationError(null);
+    
+    console.log(`Location updated: ${latitude}, ${longitude} (±${accuracy}m)`);
+  }, []);
+
+  const handleLocationError = useCallback((error: GeolocationPositionError) => {
+    console.error('Location error:', error);
+    let errorMessage = 'Unable to get location';
+    
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        errorMessage = 'Location access denied by user';
+        break;
+      case error.POSITION_UNAVAILABLE:
+        errorMessage = 'Location information unavailable';
+        break;
+      case error.TIMEOUT:
+        errorMessage = 'Location request timed out';
+        break;
+    }
+    
+    setLocationError(errorMessage);
+    setIsTrackingLocation(false);
+  }, []);
+
+  const startLocationTracking = useCallback(() => {
+    if (!navigator.geolocation) {
+      setLocationError('Geolocation not supported');
+      return;
+    }
+
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+    }
+
+    setIsTrackingLocation(true);
+    setLocationError(null);
+
+    const options: PositionOptions = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 5000
+    };
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      handleLocationSuccess,
+      handleLocationError,
+      options
+    );
+  }, [handleLocationSuccess, handleLocationError]);
+
+  const stopLocationTracking = useCallback(() => {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+    setIsTrackingLocation(false);
+  }, []);
+
+  const centreOnUser = useCallback(() => {
+    if (mapRef.current && userPosition) {
+      mapRef.current.setView([userPosition[1], userPosition[0]], 17);
+    }
+  }, [userPosition]);
+
   useEffect(() => {
     if (mapRef.current) return; 
 
     const map = L.map('map', mapOptions).setView([DEFAULT_LAT, DEFAULT_LNG], DEFAULT_ZOOM);
-    console.log('userPoint:', userPoint);
     const mapContainer = map.getContainer();
     let lastTap = 0;
 
@@ -79,13 +164,18 @@ function MapPage() {
       attribution: '&copy; <a href="https://carto.com/attributions">CartoDB</a>',
     }).addTo(map);
 
+    startLocationTracking();
+
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
       }
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+      }
     };
-  }, []);
+  }, [startLocationTracking]);
 
   useEffect(() => {
     if (!mapRef.current || !allPolygons.length) return;
@@ -100,7 +190,6 @@ function MapPage() {
       );
 
       routePolygons.forEach(polygon => {
-        console.log(polygon);
         const isStart = polygon.properties?.id === pathFinder.startNode;
         const isEnd = polygon.properties?.id === pathFinder.endNode;
         
@@ -169,7 +258,6 @@ function MapPage() {
 
     pathLayersRef.current?.clearLayers();
 
-    //pathfinder
     if (pathFinder.isActive && pathFinder.pathGeometries.length > 0) {
       pathFinder.pathGeometries.forEach(pathFeature => {
         const routePath = L.geoJSON(pathFeature, {
@@ -196,7 +284,6 @@ function MapPage() {
       mapRef.current.addLayer(pathLayersRef.current!);
 
     } else {
-      //normal map mode
       Object.values(allPaths).forEach(pathArray => {
         pathArray.forEach(pathFeature => {
           const layer = L.geoJSON(pathFeature, {
@@ -218,29 +305,50 @@ function MapPage() {
 
   //user location
   useEffect(() => {
-    if (!mapRef.current || !userPoint) return;
+    if (!mapRef.current || !userPosition) return;
 
-    const latlng = L.latLng(userPoint[1], userPoint[0]);
+    const latlng = L.latLng(userPosition[1], userPosition[0]);
+    const icon = isTrackingLocation ? trackingIcon : customIcon;
 
     if (!markerRef.current) {
-      markerRef.current = L.marker(latlng, { icon: customIcon }).addTo(mapRef.current);
+      markerRef.current = L.marker(latlng, { icon }).addTo(mapRef.current);
     } else {
-      markerRef.current.setLatLng(latlng).setIcon(customIcon);
+      markerRef.current.setLatLng(latlng).setIcon(icon);
     }
 
+    const accuracyRadius = locationAccuracy || 30;
     if (!circleRef.current) {
       circleRef.current = L.circle(latlng, { 
-        radius: 30,
-        color: '#ff6b6b',
-        fillColor: '#ff6b6b',
-        fillOpacity: 0.3
+        radius: accuracyRadius,
+        color: '#007AFF',
+        fillColor: '#007AFF',
+        fillOpacity: 0.2,
+        weight: 2
       }).addTo(mapRef.current);
     } else {
-      circleRef.current.setLatLng(latlng).setRadius(30);
+      circleRef.current.setLatLng(latlng).setRadius(accuracyRadius);
+    }
+
+    if (locationAccuracy && locationAccuracy > 50) {
+      if (!accuracyCircleRef.current) {
+        accuracyCircleRef.current = L.circle(latlng, {
+          radius: locationAccuracy,
+          color: '#007AFF',
+          fillColor: '#007AFF',
+          fillOpacity: 0.1,
+          weight: 1,
+          dashArray: '5, 5'
+        }).addTo(mapRef.current);
+      } else {
+        accuracyCircleRef.current.setLatLng(latlng).setRadius(locationAccuracy);
+      }
+    } else if (accuracyCircleRef.current) {
+      mapRef.current.removeLayer(accuracyCircleRef.current);
+      accuracyCircleRef.current = null;
     }
 
     if (!pathFinder.isActive && allPolygons.length > 0) {
-      const pt = turf.point(userPoint);
+      const pt = turf.point(userPosition);
       let nearestFeature: Feature<Polygon | MultiPolygon> | null = null;
       let minDist = Infinity;
 
@@ -259,7 +367,7 @@ function MapPage() {
       }
     }
 
-  }, [userPoint, allPolygons, pathFinder.isActive, setNearestPolygon]);
+  }, [userPosition, locationAccuracy, isTrackingLocation, allPolygons, pathFinder.isActive, setNearestPolygon]);
 
   // orientation
   useEffect(() => {
@@ -280,7 +388,6 @@ function MapPage() {
     prevOrientation.current = orientation;
   }, [orientation]);
 
-
   return (
     <div className="relative">
       <div
@@ -291,59 +398,112 @@ function MapPage() {
       />
       
       {/* Reset view overlay */}
-      <button onClick={resetToDefaultView} className="absolute bottom-4 left-4 !bg-white !text-black hover:bg-gray-50 text-gray-700 p-3 rounded-lg shadow-lg z-[1000] transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none" title="Reset to default view">
-        <i className="fas fa-refresh"></i>
-        <span className="text-sm font-medium">Reset View</span>
-      </button>
-      
-      {/* Route info overlay */}
-    {pathFinder.isActive && pathFinder.pathNodes.length > 0 && (
-      <div className={`absolute top-4 right-4 bg-white rounded-lg shadow-lg max-w-sm z-[1000] transition-all duration-300 ${routeInfoCollapsed ? 'p-2' : 'p-3'}`}>
-        {!routeInfoCollapsed ? (
-          <>
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="!text-gray-900 font-semibold text-sm">Active Route</h4>
-              <button onClick={() => setRouteInfoCollapsed(true)} className="!bg-white !text-gray-400  hover:text-gray-600 transition-colors">
-                <i className="fas fa-chevron-down w-4 h-4"></i>
-              </button>
-            </div>
-            <p className="text-xs text-gray-600 mb-1">
-              From: <span className="font-medium text-[#3A5F3A]">{pathFinder.startNode}</span>
-            </p>
-            <p className="text-xs text-gray-600 mb-1">
-              To: <span className="font-medium text-red-600">{pathFinder.endNode}</span>
-            </p>
-            <p className="text-xs text-gray-600 mb-2">
-              Distance: <span className="font-medium">
-                {pathFinder.distance ? `${(pathFinder.distance * 100000).toFixed(0)}m` : 'N/A'}
-              </span>
-            </p>
-            <div className="flex items-center text-xs text-gray-500 space-x-3">
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-[#3A5F3A] rounded mr-1"></div>Start
-              </div>
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>Route
-              </div>
-              <div className="flex items-center">
-                <div className="w-3 h-3 bg-red-500 rounded mr-1"></div>End
-              </div>
-            </div>
-            <div className="mt-2 pt-2 border-t border-gray-200">
-              <div className="flex items-center text-xs text-gray-500">
-                <div className="w-6 h-1 bg-yellow-400 mr-2"></div>Route Path
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="flex items-center justify-between">
-            <button onClick={() => setRouteInfoCollapsed(false)} className="!bg-white !text-gray-400 hover:text-gray-600 transition-colors">
-              <i className="fas fa-chevron-up w-4 h-4"></i>
-            </button>
-          </div>
+      <div className="absolute bottom-4 left-4 flex flex-col space-y-2 z-[1000]">
+        <button 
+          onClick={resetToDefaultView} 
+          className="bg-white text-gray-700 hover:bg-gray-50 p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none"
+          title="Reset to default view"
+        >
+          <i className="fas fa-refresh"></i>
+          <span className="text-sm font-medium">Reset View</span>
+        </button>
+        
+        <button 
+          onClick={isTrackingLocation ? stopLocationTracking : startLocationTracking}
+          className={`p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none ${
+            isTrackingLocation 
+              ? 'bg-blue-500 text-white hover:bg-blue-600' 
+              : 'bg-white text-gray-700 hover:bg-gray-50'
+          }`}
+          title={isTrackingLocation ? "Stop location tracking" : "Start location tracking"}
+        >
+          <i className={`fas ${isTrackingLocation ? 'fa-location-arrow' : 'fa-location-crosshairs'}`}></i>
+          <span className="text-sm font-medium">
+            {isTrackingLocation ? 'Tracking' : 'Track'}
+          </span>
+        </button>
+        
+        {userPosition && (
+          <button 
+            onClick={centreOnUser}
+            className="bg-white text-gray-700 hover:bg-gray-50 p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none"
+            title="Centre on my location"
+          >
+            <i className="fas fa-crosshairs"></i>
+            <span className="text-sm font-medium">Centre</span>
+          </button>
         )}
       </div>
-    )}
+
+      {(locationError || isTrackingLocation) && (
+        <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-[1000] max-w-xs">
+          {locationError ? (
+            <div className="flex items-center space-x-2 text-red-600">
+              <i className="fas fa-exclamation-triangle"></i>
+              <span className="text-sm">{locationError}</span>
+            </div>
+          ) : isTrackingLocation ? (
+            <div className="flex items-center space-x-2 text-blue-600">
+              <i className="fas fa-satellite-dish animate-pulse"></i>
+              <span className="text-sm">
+                Tracking location
+                {locationAccuracy && (
+                  <span className="text-gray-500"> (±{Math.round(locationAccuracy)}m)</span>
+                )}
+              </span>
+            </div>
+          ) : null}
+        </div>
+      )}
+      
+      {/* Route info overlay */}
+      {pathFinder.isActive && pathFinder.pathNodes.length > 0 && (
+        <div className={`absolute top-4 right-4 bg-white rounded-lg shadow-lg max-w-sm z-[1000] transition-all duration-300 ${routeInfoCollapsed ? 'p-2' : 'p-3'}`}>
+          {!routeInfoCollapsed ? (
+            <>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-gray-900 font-semibold text-sm">Active Route</h4>
+                <button onClick={() => setRouteInfoCollapsed(true)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                  <i className="fas fa-chevron-down w-4 h-4"></i>
+                </button>
+              </div>
+              <p className="text-xs text-gray-600 mb-1">
+                From: <span className="font-medium text-green-600">{pathFinder.startNode}</span>
+              </p>
+              <p className="text-xs text-gray-600 mb-1">
+                To: <span className="font-medium text-red-600">{pathFinder.endNode}</span>
+              </p>
+              <p className="text-xs text-gray-600 mb-2">
+                Distance: <span className="font-medium">
+                  {pathFinder.distance ? `${(pathFinder.distance * 100000).toFixed(0)}m` : 'N/A'}
+                </span>
+              </p>
+              <div className="flex items-center text-xs text-gray-500 space-x-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-green-500 rounded mr-1"></div>Start
+                </div>
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>Route
+                </div>
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-red-500 rounded mr-1"></div>End
+                </div>
+              </div>
+              <div className="mt-2 pt-2 border-t border-gray-200">
+                <div className="flex items-center text-xs text-gray-500">
+                  <div className="w-6 h-1 bg-yellow-400 mr-2"></div>Route Path
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-between">
+              <button onClick={() => setRouteInfoCollapsed(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <i className="fas fa-chevron-up w-4 h-4"></i>
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -5,7 +5,6 @@ import { supabase } from '../supabase';
 import Description from '../components/Description';
 import { useOrientation } from '../context/Orientation';
 
-
 interface DescriptionInterface {
   id: number;
   location: string;
@@ -23,77 +22,86 @@ const InsidePanel = () => {
   const heroImage = props?.heroImage;
   const locationName = props?.id || 'Unknown Location';
 
-  
   const [items, setItems] = useState<DescriptionInterface[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase
-        .from('descriptions')
-        .select('*')
-        .eq('location', locationName);
-  
-      if (error) {
-        console.error(error);
-      } else {
-        setItems(data as DescriptionInterface[]); 
+      if (!locationName || locationName === 'Unknown Location') {
+        setItems([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('descriptions')
+          .select('*')
+          .eq('location', locationName);
+
+        if (error) {
+          console.error('Error fetching descriptions:', error);
+          setItems([]);
+        } else {
+          setItems(data as DescriptionInterface[]); 
+        }
+      } catch (error) {
+        console.error('Unexpected error:', error);
+        setItems([]);
+      } finally {
+        setIsLoading(false);
       }
     };
-  
+
     fetchData();
-  }, []);
+  }, [locationName]); 
 
   return (
     <div className="flex flex-col h-[50dvh] bg-white">
-    <div className={`rounded-lg shadow-lg bg-white flex flex-col ${ orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full'}`}>
-      <div className="relative pt-28 pb-5 w-full bg-gray-200">
-        {heroImage ? (
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImage})` }}
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-gray-500">
-            No image
-          </div>
-        )}
-        <div className="absolute inset-0 bg-black/40" />
-  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#3A5F3A] to-green-900" />
+      <div className={`rounded-lg shadow-lg bg-white flex flex-col ${orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full'}`}>
+        <div className="relative pt-28 pb-5 w-full bg-gray-200">
+          {heroImage ? (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${heroImage})` }}
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-gray-500">
+              No image
+            </div>
+          )}
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#3A5F3A] to-green-900" />
 
-        <div className="absolute bottom-0 w-full p-4 bg-opacity-80 text-white">
-          <p className="text-lg font-medium">You are at:</p>
-          <h1 className="text-3xl font-bold">{locationName}</h1>
+          <div className="absolute bottom-0 w-full p-4 bg-opacity-80 text-white">
+            <p className="text-lg font-medium">You are at:</p>
+            <h1 className="text-3xl font-bold">{locationName}</h1>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 pb-28">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-2"></div>
+              <p className="text-gray-600">Loading location details...</p>
+            </div>
+          ) : items.length > 0 ? (
+            items.map((item) => (
+              <Description key={item.id} data={item} />
+            ))
+          ) : (
+            <div className="text-center py-8 text-gray-500">
+              No details available for this location.
+            </div>
+          )}
         </div>
         
+        <div className="sticky bottom-0">
+          <MenuBar/>
+        </div>
       </div>
-
-      <div className="flex-1 overflow-y-auto p-4 pb-28">
-        {items.map((item) => (
-          <Description key={item.id} data={item} />
-        ))}
-      </div>
-      
-    <div className="sticky bottom-0">
-      <MenuBar/>
     </div>
-    </div></div>
-    
   );
 };
 
 export default InsidePanel;
-
-        {/*
-        <h3 className="text-lg font-semibold">User Location</h3>
-        {userPoint ? (
-          <p>Lat: {userPoint[1].toFixed(5)}, Lng: {userPoint[0].toFixed(5)}</p>
-        ) : (
-          <p className="text-gray-500">Location not available</p>
-        )}
-
-        <h3 className="text-lg font-semibold mt-4">Polygon Data</h3>
-        {props ? (
-          <pre className="text-sm text-gray-800 bg-gray-100 p-2 rounded">{JSON.stringify(props, null, 2)}</pre>
-        ) : (
-          <p className="text-gray-500">No polygon data</p>
-        )}
-          */}
