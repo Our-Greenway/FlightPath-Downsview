@@ -11,14 +11,6 @@ const DEFAULT_LAT = 43.7439869729327;
 const DEFAULT_LNG = -79.4841983609762;
 const DEFAULT_ZOOM = 15;
 
-const customIcon = L.icon({
-  iconUrl: "./LocationIcon.svg",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-
 const trackingIcon = L.icon({
   iconUrl: "./LocationIcon.svg",
   iconSize: [30, 46],
