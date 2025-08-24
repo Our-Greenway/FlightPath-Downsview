@@ -54,11 +54,11 @@ const InsidePanel = () => {
     };
 
     fetchData();
-  }, [locationName]); // Removed setIsLoading dependency
+  }, [locationName]);
 
   return (
-    <div className="flex flex-col h-[50dvh] bg-white">
-      <div className={`rounded-lg shadow-lg bg-white flex flex-col ${orientation === 'landscape' ? 'h-screen' : 'flex-1 w-full'}`}>
+    <div className="flex flex-col h-[50dvh] bg-white relative">
+      <div className={`rounded-lg shadow-lg bg-white flex flex-col ${orientation === 'landscape' ? 'h-screen' : 'h-full'}`}>
         <div className="relative pt-28 pb-5 w-full bg-gray-200">
           {heroImage ? (
             <div
@@ -79,7 +79,7 @@ const InsidePanel = () => {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 pb-28">
+        <div className="flex-1 overflow-y-auto p-4 pb-20">
           {isLoadingContent ? (
             <div className="flex items-center justify-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mr-3"></div>
@@ -95,10 +95,10 @@ const InsidePanel = () => {
             </div>
           )}
         </div>
-        
-        <div className="sticky bottom-0">
-          <MenuBar/>
-        </div>
+      </div>
+      
+      <div className="absolute bottom-0 left-0 right-0 z-10">
+        <MenuBar/>
       </div>
     </div>
   );
