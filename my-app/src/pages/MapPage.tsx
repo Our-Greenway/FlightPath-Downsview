@@ -40,8 +40,6 @@ function MapPage() {
   
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [locationAccuracy, setLocationAccuracy] = useState<number | null>(null);
-  const [isTrackingLocation, setIsTrackingLocation] = useState(false);
-  const [locationError, setLocationError] = useState<string | null>(null);
   const [routeInfoCollapsed, setRouteInfoCollapsed] = useState(false);
   
   // Layer groups for organizing map content
@@ -66,43 +64,23 @@ function MapPage() {
     
     setUserPosition(newPosition);
     setLocationAccuracy(accuracy);
-    setLocationError(null);
     
     console.log(`Location updated: ${latitude}, ${longitude} (±${accuracy}m)`);
   }, []);
 
   const handleLocationError = useCallback((error: GeolocationPositionError) => {
     console.error('Location error:', error);
-    let errorMessage = 'Unable to get location';
-    
-    switch (error.code) {
-      case error.PERMISSION_DENIED:
-        errorMessage = 'Location access denied by user';
-        break;
-      case error.POSITION_UNAVAILABLE:
-        errorMessage = 'Location information unavailable';
-        break;
-      case error.TIMEOUT:
-        errorMessage = 'Location request timed out';
-        break;
-    }
-    
-    setLocationError(errorMessage);
-    setIsTrackingLocation(false);
+    // Silently handle error - you could add minimal error handling here if needed
   }, []);
 
   const startLocationTracking = useCallback(() => {
     if (!navigator.geolocation) {
-      setLocationError('Geolocation not supported');
       return;
     }
 
     if (watchIdRef.current !== null) {
       navigator.geolocation.clearWatch(watchIdRef.current);
     }
-
-    setIsTrackingLocation(true);
-    setLocationError(null);
 
     const options: PositionOptions = {
       enableHighAccuracy: true,
@@ -116,14 +94,6 @@ function MapPage() {
       options
     );
   }, [handleLocationSuccess, handleLocationError]);
-
-  const stopLocationTracking = useCallback(() => {
-    if (watchIdRef.current !== null) {
-      navigator.geolocation.clearWatch(watchIdRef.current);
-      watchIdRef.current = null;
-    }
-    setIsTrackingLocation(false);
-  }, []);
 
   const centreOnUser = useCallback(() => {
     if (mapRef.current && userPosition) {
@@ -308,7 +278,7 @@ function MapPage() {
     if (!mapRef.current || !userPosition) return;
 
     const latlng = L.latLng(userPosition[1], userPosition[0]);
-    const icon = isTrackingLocation ? trackingIcon : customIcon;
+    const icon = trackingIcon;
 
     if (!markerRef.current) {
       markerRef.current = L.marker(latlng, { icon }).addTo(mapRef.current);
@@ -367,7 +337,7 @@ function MapPage() {
       }
     }
 
-  }, [userPosition, locationAccuracy, isTrackingLocation, allPolygons, pathFinder.isActive, setNearestPolygon]);
+  }, [userPosition, locationAccuracy, allPolygons, pathFinder.isActive, setNearestPolygon]);
 
   // orientation
   useEffect(() => {
@@ -397,7 +367,7 @@ function MapPage() {
         }}
       />
       
-      {/* Reset view overlay */}
+      {/* Control panel */}
       <div className="absolute bottom-4 left-4 flex flex-col space-y-2 z-[1000]">
         <button 
           onClick={resetToDefaultView} 
@@ -406,21 +376,6 @@ function MapPage() {
         >
           <i className="fas fa-refresh"></i>
           <span className="text-sm font-medium">Reset View</span>
-        </button>
-        
-        <button 
-          onClick={isTrackingLocation ? stopLocationTracking : startLocationTracking}
-          className={`p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none ${
-            isTrackingLocation 
-              ? 'bg-blue-500 text-white hover:bg-blue-600' 
-              : 'bg-white text-gray-700 hover:bg-gray-50'
-          }`}
-          title={isTrackingLocation ? "Stop location tracking" : "Start location tracking"}
-        >
-          <i className={`fas ${isTrackingLocation ? 'fa-location-arrow' : 'fa-location-crosshairs'}`}></i>
-          <span className="text-sm font-medium">
-            {isTrackingLocation ? 'Tracking' : 'Track'}
-          </span>
         </button>
         
         {userPosition && (
@@ -435,27 +390,6 @@ function MapPage() {
         )}
       </div>
 
-      {(locationError || isTrackingLocation) && (
-        <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 z-[1000] max-w-xs">
-          {locationError ? (
-            <div className="flex items-center space-x-2 text-red-600">
-              <i className="fas fa-exclamation-triangle"></i>
-              <span className="text-sm">{locationError}</span>
-            </div>
-          ) : isTrackingLocation ? (
-            <div className="flex items-center space-x-2 text-blue-600">
-              <i className="fas fa-satellite-dish animate-pulse"></i>
-              <span className="text-sm">
-                Tracking location
-                {locationAccuracy && (
-                  <span className="text-gray-500"> (±{Math.round(locationAccuracy)}m)</span>
-                )}
-              </span>
-            </div>
-          ) : null}
-        </div>
-      )}
-      
       {/* Route info overlay */}
       {pathFinder.isActive && pathFinder.pathNodes.length > 0 && (
         <div className={`absolute top-4 right-4 bg-white rounded-lg shadow-lg max-w-sm z-[1000] transition-all duration-300 ${routeInfoCollapsed ? 'p-2' : 'p-3'}`}>
