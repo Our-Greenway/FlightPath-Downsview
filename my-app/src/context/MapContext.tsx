@@ -33,7 +33,6 @@ interface MapContextType {
   
   setUserPoint: (pt: Coordinates) => void;
   setNearestPolygon: (f: Feature<Polygon | MultiPolygon>) => void;
-  setIsLoading: (loading: boolean) => void; 
   setPathFinderActive: (active: boolean) => void;
   setPathFinderResult: (result: {
     startNode: string;
@@ -50,7 +49,6 @@ const MapContext = createContext<MapContextType | undefined>(undefined);
 
 // Helper functions to load geojson data
 const loadPolygons = async (basePath: string, files: string[]) => {
-  
   const polygons: Feature<Polygon | MultiPolygon>[] = [];
 
   for (const file of files) {
@@ -77,7 +75,7 @@ const loadPathCollections = async (
   const result: Record<string, Feature<LineString>[]> = {};
 
   for (const file of files) {
-    if (file === 'pathFiles.txt') continue; // Skip the txt file
+    if (file === 'pathFiles.txt') continue;
     
     const url = `${basePath}/${file}`;
     try {
@@ -100,12 +98,16 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [distance, setDistance] = useState<number | null>(null);
   const [nearestPolygon, setNearestPolygon] = useState<Feature<Polygon | MultiPolygon> | null>(null);
   const [isInside, setIsInside] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // NEW: Loading state (starts as true)
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPolygonData, setCurrentPolygonData] = useState<{
     id: string;
     heroImage: string;
     description: string;
   } | null>(null);
+
+  // Track loading states separately
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [locationRequested, setLocationRequested] = useState(false);
 
   // PathFinder state
   const [pathFinder, setPathFinder] = useState<PathFinderState>({
@@ -118,14 +120,12 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const [savedPathFinder, setSavedPathFinder] = useState<PathFinderState | null>(null);
-
   const [allPolygons, setAllPolygons] = useState<Feature<Polygon | MultiPolygon>[]>([]);
   const [allPaths, setAllPaths] = useState<Record<string, Feature<LineString>[]>>({});
 
+  // Load GeoJSON data
   useEffect(() => {
     const loadData = async () => {
-      setIsLoading(true); 
-      
       const polygonFiles = [
         "BoakesGrove.geojson",
         "DogsviewPark.geojson",
@@ -185,18 +185,20 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
 
         setAllPolygons(polygons);
         setAllPaths(paths);
+        setDataLoaded(true);
       } catch (error) {
         console.error('Error loading map data:', error);
-      } finally {
-        setIsLoading(false); 
+        setDataLoaded(true); // Still mark as loaded even if failed
       }
     };
 
     loadData();
   }, []);
 
-  // user location
+  // Request user location
   useEffect(() => {
+    setLocationRequested(true);
+    
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
@@ -204,7 +206,12 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       },
       (error) => {
         console.error("Error getting user location:", error);
-        setIsLoading(false); 
+        // Don't set loading to false here - let the main loading logic handle it
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 30000
       }
     );
 
@@ -213,7 +220,24 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  // calculates distance -> nearest poly
+  // Main loading logic - only set isLoading to false when ready
+  useEffect(() => {
+    if (dataLoaded && locationRequested) {
+      if (userPoint || allPolygons.length > 0) {
+        // We have either location OR data, good enough to show UI
+        setIsLoading(false);
+      } else {
+        // Fallback: if no location after 6 seconds, show UI anyway
+        const timeoutId = setTimeout(() => {
+          setIsLoading(false);
+        }, 6000);
+
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [dataLoaded, locationRequested, userPoint, allPolygons.length]);
+
+  // Calculate distance to nearest polygon
   useEffect(() => {
     if (!userPoint || !nearestPolygon) return;
 
@@ -254,21 +278,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   }, [userPoint, nearestPolygon]);
-
-  // loading state based on data availability
-  useEffect(() => {
-    if (allPolygons.length > 0) {
-      if (!userPoint) {
-        const timeoutId = setTimeout(() => {
-          setIsLoading(false);
-        }, 5000); 
-
-        return () => clearTimeout(timeoutId);
-      } else {
-        setIsLoading(false);
-      }
-    }
-  }, [allPolygons.length, userPoint]);
 
   const setPathFinderActive = (active: boolean) => {
     setPathFinder(prev => ({ ...prev, isActive: active }));
@@ -347,7 +356,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         allPaths,
         setUserPoint,
         setNearestPolygon,
-        setIsLoading, 
         setPathFinderActive,
         setPathFinderResult,
         clearPathFinder,
