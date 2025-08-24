@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useMapContext } from '../context/MapContext';
 import ApproachingPanel from "../pages/ApproachingPanel"
 import InsidePanel from "../pages/InsidePanel"
@@ -15,11 +16,24 @@ const LoadingScreen = () => (
 const InfoPanel = () => {
   const { isInside, isLoading } = useMapContext();
   const orientation = useOrientation();
+  const [debouncedLoading, setDebouncedLoading] = useState(isLoading);
+
+  useEffect(() => {
+    if (isLoading) {
+      setDebouncedLoading(true);
+    } else {
+      const timer = setTimeout(() => {
+        setDebouncedLoading(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
 
   return (
     <div className={`${orientation === 'landscape' ? 'h-[100dvh]' : 'sticky bottom-0 h-[50vh]'} max-h-[100dvh] bg-white rounded-lg shadow-lg overflow-hidden flex flex-col w-full`}>
       <div className={`${orientation === 'landscape' ? 'flex-grow' : 'h-full'} overflow-y-auto`}>
-        {isLoading ? (
+        {debouncedLoading ? (
           <LoadingScreen />
         ) : (
           <>
