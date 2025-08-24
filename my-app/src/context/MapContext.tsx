@@ -18,6 +18,7 @@ interface MapContextType {
   nearestPolygon: Feature<Polygon | MultiPolygon> | null;
   distance: number | null;
   isInside: boolean | null;
+  isLoading: boolean; // NEW: Loading state
   currentPolygonData: {
     id: string;
     heroImage: string;
@@ -31,6 +32,7 @@ interface MapContextType {
   
   setUserPoint: (pt: Coordinates) => void;
   setNearestPolygon: (f: Feature<Polygon | MultiPolygon>) => void;
+  setIsLoading: (loading: boolean) => void; // NEW: Setter for loading state
   setPathFinderActive: (active: boolean) => void;
   setPathFinderResult: (result: {
     startNode: string;
@@ -97,6 +99,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [distance, setDistance] = useState<number | null>(null);
   const [nearestPolygon, setNearestPolygon] = useState<Feature<Polygon | MultiPolygon> | null>(null);
   const [isInside, setIsInside] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true); // NEW: Loading state (starts as true)
   const [currentPolygonData, setCurrentPolygonData] = useState<{
     id: string;
     heroImage: string;
@@ -123,6 +126,8 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   // Load all geojson data on mount
   useEffect(() => {
     const loadData = async () => {
+      setIsLoading(true); // Start loading
+      
       const polygonFiles = [
         "BoakesGrove.geojson",
         "DogsviewPark.geojson",
@@ -174,13 +179,19 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         "urbanfarm_to_minimound.geojson"
       ];
 
-      const [polygons, paths] = await Promise.all([
-        loadPolygons('/geojson', polygonFiles),
-        loadPathCollections('/geojson/paths', pathFiles)
-      ]);
+      try {
+        const [polygons, paths] = await Promise.all([
+          loadPolygons('/geojson', polygonFiles),
+          loadPathCollections('/geojson/paths', pathFiles)
+        ]);
 
-      setAllPolygons(polygons);
-      setAllPaths(paths);
+        setAllPolygons(polygons);
+        setAllPaths(paths);
+      } catch (error) {
+        console.error('Error loading map data:', error);
+      } finally {
+        setIsLoading(false); // End loading
+      }
     };
 
     loadData();
@@ -188,15 +199,21 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
 
   // user location
   useEffect(() => {
-    navigator.geolocation.watchPosition(
+    const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setUserPoint([longitude, latitude]);
       },
       (error) => {
         console.error("Error getting user location:", error);
+        setIsLoading(false); // Stop loading even if location fails
       }
     );
+
+    // Cleanup function to clear the watch
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
   }, []);
 
   // calculates distance -> nearest poly
@@ -240,6 +257,26 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   }, [userPoint, nearestPolygon]);
+
+  // NEW: Effect to manage loading state based on critical data availability
+  useEffect(() => {
+    // Only stop loading when we have both polygons loaded AND either:
+    // 1. User location is available, OR
+    // 2. We've determined we can't get user location
+    if (allPolygons.length > 0) {
+      // If we have polygons but no user point yet, keep loading for a bit
+      if (!userPoint) {
+        // Set a timeout to stop loading even if we don't get user location
+        const timeoutId = setTimeout(() => {
+          setIsLoading(false);
+        }, 5000); 
+
+        return () => clearTimeout(timeoutId);
+      } else {
+        setIsLoading(false);
+      }
+    }
+  }, [allPolygons.length, userPoint]);
 
   const setPathFinderActive = (active: boolean) => {
     setPathFinder(prev => ({ ...prev, isActive: active }));
@@ -311,12 +348,14 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         currentPolygonData,
         distance,
         isInside,
+        isLoading,
         pathFinder,
         savedPathFinder,
         allPolygons,
         allPaths,
         setUserPoint,
         setNearestPolygon,
+        setIsLoading, 
         setPathFinderActive,
         setPathFinderResult,
         clearPathFinder,

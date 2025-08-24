@@ -15,7 +15,7 @@ interface DescriptionInterface {
 }
 
 const InsidePanel = () => {
-  const { nearestPolygon } = useMapContext();
+  const { nearestPolygon, setIsLoading } = useMapContext(); // Get setIsLoading from context
   const orientation = useOrientation();
 
   const props = nearestPolygon?.properties;
@@ -23,7 +23,6 @@ const InsidePanel = () => {
   const locationName = props?.id || 'Unknown Location';
 
   const [items, setItems] = useState<DescriptionInterface[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +31,7 @@ const InsidePanel = () => {
         return;
       }
 
-      setIsLoading(true);
+      setIsLoading(true); // Use context loading state
       try {
         const { data, error } = await supabase
           .from('descriptions')
@@ -49,12 +48,12 @@ const InsidePanel = () => {
         console.error('Unexpected error:', error);
         setItems([]);
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // Use context loading state
       }
     };
 
     fetchData();
-  }, [locationName]); 
+  }, [locationName, setIsLoading]); 
 
   return (
     <div className="flex flex-col h-[50dvh] bg-white">
@@ -80,12 +79,7 @@ const InsidePanel = () => {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 pb-28">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mr-2"></div>
-              <p className="text-gray-600">Loading location details...</p>
-            </div>
-          ) : items.length > 0 ? (
+          {items.length > 0 ? (
             items.map((item) => (
               <Description key={item.id} data={item} />
             ))
