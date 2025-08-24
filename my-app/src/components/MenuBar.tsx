@@ -6,7 +6,7 @@ const MenuBar = () => {
   const navigate = useNavigate();
 
   const isPathfinder = location.pathname === "/pathfinder";
-  const defaultLabel = isPathfinder ? "Go to Navigation" : "Go to Pathfinder";
+  const buttonLabel = isPathfinder ? "Navigation" : "Pathfinder";
   const targetPath = isPathfinder ? "/" : "/pathfinder";
 
   const [isShort, setIsShort] = useState(false);
@@ -26,7 +26,7 @@ const MenuBar = () => {
       <div className="flex gap-3 justify-between border-t border-gray-700 p-2">
         <img src="/OurGreenwayCombinationMarkHorizontalWhite.svg" alt="Our Greenway Logo" className="max-h-9"/>
         <button className="p-0 !bg-white !text-black dark:bg-gray-200 dark:text-black font-semibold rounded touch-manipulation select-none appearance-none border-none outline-none" onClick={() => navigate(targetPath)}>
-        {isShort ? location.pathname === "/pathfinder" ? "Navigation" : location.pathname === "/" ? "Pathfinder" : defaultLabel : defaultLabel}
+          {buttonLabel}
         </button>
       </div>
     </div>

@@ -13,7 +13,7 @@ const LoadingScreen = () => (
 );
 
 const InfoPanel = () => {
-  const { isInside, isLoading } = useMapContext(); // Add isLoading from context
+  const { isInside, isLoading } = useMapContext();
   const orientation = useOrientation();
 
   return (

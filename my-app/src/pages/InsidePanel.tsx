@@ -15,7 +15,7 @@ interface DescriptionInterface {
 }
 
 const InsidePanel = () => {
-  const { nearestPolygon, setIsLoading } = useMapContext(); // Get setIsLoading from context
+  const { nearestPolygon, setIsLoading } = useMapContext(); 
   const orientation = useOrientation();
 
   const props = nearestPolygon?.properties;
@@ -31,7 +31,7 @@ const InsidePanel = () => {
         return;
       }
 
-      setIsLoading(true); // Use context loading state
+      setIsLoading(true);
       try {
         const { data, error } = await supabase
           .from('descriptions')
@@ -48,7 +48,7 @@ const InsidePanel = () => {
         console.error('Unexpected error:', error);
         setItems([]);
       } finally {
-        setIsLoading(false); // Use context loading state
+        setIsLoading(false); 
       }
     };
 

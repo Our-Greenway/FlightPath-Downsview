@@ -363,7 +363,7 @@ function MapPage() {
       <div className="absolute bottom-4 left-4 flex flex-col space-y-2 z-[1000]">
         <button 
           onClick={resetToDefaultView} 
-          className="bg-white text-gray-700 hover:bg-gray-50 p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none"
+          className="!bg-white !text-gray-700 hover:bg-gray-50 p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none"
           title="Reset to default view"
         >
           <i className="fas fa-refresh"></i>
@@ -373,11 +373,11 @@ function MapPage() {
         {userPosition && (
           <button 
             onClick={centreOnUser}
-            className="bg-white text-gray-700 hover:bg-gray-50 p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none"
+            className="!bg-white !text-gray-700  hover:bg-gray-50 p-3 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2 touch-manipulation select-none appearance-none border-none outline-none"
             title="Centre on my location"
           >
             <i className="fas fa-crosshairs"></i>
-            <span className="text-sm font-medium">Centre</span>
+            <span className="text-sm font-medium">Centre View</span>
           </button>
         )}
       </div>

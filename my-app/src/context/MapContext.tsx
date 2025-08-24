@@ -18,12 +18,13 @@ interface MapContextType {
   nearestPolygon: Feature<Polygon | MultiPolygon> | null;
   distance: number | null;
   isInside: boolean | null;
-  isLoading: boolean; // NEW: Loading state
+  isLoading: boolean;
   currentPolygonData: {
     id: string;
     heroImage: string;
     description: string;
   } | null;
+
   // PathFinder state
   pathFinder: PathFinderState;
   savedPathFinder: PathFinderState | null;
@@ -32,7 +33,7 @@ interface MapContextType {
   
   setUserPoint: (pt: Coordinates) => void;
   setNearestPolygon: (f: Feature<Polygon | MultiPolygon>) => void;
-  setIsLoading: (loading: boolean) => void; // NEW: Setter for loading state
+  setIsLoading: (loading: boolean) => void; 
   setPathFinderActive: (active: boolean) => void;
   setPathFinderResult: (result: {
     startNode: string;
@@ -116,17 +117,14 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     distance: null,
   });
 
-  // Saved PathFinder state for persistence
   const [savedPathFinder, setSavedPathFinder] = useState<PathFinderState | null>(null);
 
-  // Store all loaded data
   const [allPolygons, setAllPolygons] = useState<Feature<Polygon | MultiPolygon>[]>([]);
   const [allPaths, setAllPaths] = useState<Record<string, Feature<LineString>[]>>({});
 
-  // Load all geojson data on mount
   useEffect(() => {
     const loadData = async () => {
-      setIsLoading(true); // Start loading
+      setIsLoading(true); 
       
       const polygonFiles = [
         "BoakesGrove.geojson",
@@ -190,7 +188,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       } catch (error) {
         console.error('Error loading map data:', error);
       } finally {
-        setIsLoading(false); // End loading
+        setIsLoading(false); 
       }
     };
 
@@ -206,11 +204,10 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       },
       (error) => {
         console.error("Error getting user location:", error);
-        setIsLoading(false); // Stop loading even if location fails
+        setIsLoading(false); 
       }
     );
 
-    // Cleanup function to clear the watch
     return () => {
       navigator.geolocation.clearWatch(watchId);
     };
@@ -258,15 +255,10 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [userPoint, nearestPolygon]);
 
-  // NEW: Effect to manage loading state based on critical data availability
+  // loading state based on data availability
   useEffect(() => {
-    // Only stop loading when we have both polygons loaded AND either:
-    // 1. User location is available, OR
-    // 2. We've determined we can't get user location
     if (allPolygons.length > 0) {
-      // If we have polygons but no user point yet, keep loading for a bit
       if (!userPoint) {
-        // Set a timeout to stop loading even if we don't get user location
         const timeoutId = setTimeout(() => {
           setIsLoading(false);
         }, 5000); 
