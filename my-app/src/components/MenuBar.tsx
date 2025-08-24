@@ -9,17 +9,7 @@ const MenuBar = () => {
   const buttonLabel = isPathfinder ? "Navigation" : "Pathfinder";
   const targetPath = isPathfinder ? "/" : "/pathfinder";
 
-  const [isShort, setIsShort] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsShort(window.innerHeight < 650);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <div className="sticky bottom-0 bg-gray-800 z-50">
