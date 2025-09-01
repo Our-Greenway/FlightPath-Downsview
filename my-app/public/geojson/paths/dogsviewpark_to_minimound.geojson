@@ -1,8 +1,35 @@
 {
-"type": "FeatureCollection",
-"name": "dogsviewpark_to_minimound",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "length": 6.9387745050913642e-05 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.478962596414675, 43.738645454892591 ], [ -79.47892294175179, 43.738702394921347 ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "name": "dogsviewpark_to_minimound",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "length": 7.087211708159213,
+        "degreeLength": 6.938774505091364e-05
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -79.47896259641468,
+              43.73864545489259
+            ],
+            [
+              -79.47892294175179,
+              43.73870239492135
+            ]
+          ]
+        ]
+      }
+    }
+  ]
 }

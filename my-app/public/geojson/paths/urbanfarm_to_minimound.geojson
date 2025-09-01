@@ -1,8 +1,43 @@
 {
-"type": "FeatureCollection",
-"name": "urbanfarm_to_minimound",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "length": 0.00079930017426498088 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.478184754950377, 43.736981992623875 ], [ -79.477918356958668, 43.737130443413143 ], [ -79.47765399253943, 43.737323632796432 ], [ -79.47753197819209, 43.737437512853951 ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "name": "urbanfarm_to_minimound",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "length": 73.32654288403752,
+        "degreeLength": 0.0007993001742649809
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -79.47818475495038,
+              43.736981992623875
+            ],
+            [
+              -79.47791835695867,
+              43.73713044341314
+            ],
+            [
+              -79.47765399253943,
+              43.73732363279643
+            ],
+            [
+              -79.47753197819209,
+              43.73743751285395
+            ]
+          ]
+        ]
+      }
+    }
+  ]
 }

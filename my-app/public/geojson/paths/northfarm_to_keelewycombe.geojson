@@ -1,8 +1,51 @@
 {
-"type": "FeatureCollection",
-"name": "northfarm_to_keelewycombe",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "length": 0.00070499611095974914 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.48576252377751, 43.743772091053458 ], [ -79.485765235207452, 43.743660922425882 ], [ -79.485755745202667, 43.743533485218663 ], [ -79.485705583748754, 43.743315215108417 ], [ -79.485652710864912, 43.743167442176635 ], [ -79.485620173705613, 43.74308881070835 ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "name": "northfarm_to_keelewycombe",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "length": 77.20229449431244,
+        "degreeLength": 0.0007049961109597491
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -79.48576252377751,
+              43.74377209105346
+            ],
+            [
+              -79.48576523520745,
+              43.74366092242588
+            ],
+            [
+              -79.48575574520267,
+              43.74353348521866
+            ],
+            [
+              -79.48570558374875,
+              43.74331521510842
+            ],
+            [
+              -79.48565271086491,
+              43.743167442176635
+            ],
+            [
+              -79.48562017370561,
+              43.74308881070835
+            ]
+          ]
+        ]
+      }
+    }
+  ]
 }

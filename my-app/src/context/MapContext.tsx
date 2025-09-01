@@ -105,7 +105,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     description: string;
   } | null>(null);
 
-  // Track loading states separately
   const [dataLoaded, setDataLoaded] = useState(false);
   const [locationRequested, setLocationRequested] = useState(false);
 
@@ -123,7 +122,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
   const [allPolygons, setAllPolygons] = useState<Feature<Polygon | MultiPolygon>[]>([]);
   const [allPaths, setAllPaths] = useState<Record<string, Feature<LineString>[]>>({});
 
-  // Load GeoJSON data
   useEffect(() => {
     const loadData = async () => {
       const polygonFiles = [
@@ -188,7 +186,7 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
         setDataLoaded(true);
       } catch (error) {
         console.error('Error loading map data:', error);
-        setDataLoaded(true); // Still mark as loaded even if failed
+        setDataLoaded(true);
       }
     };
 
@@ -206,7 +204,6 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
       },
       (error) => {
         console.error("Error getting user location:", error);
-        // Don't set loading to false here - let the main loading logic handle it
       },
       {
         enableHighAccuracy: true,
@@ -220,14 +217,12 @@ export const MapProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  // Main loading logic - only set isLoading to false when ready
+  // Main loading logic
   useEffect(() => {
     if (dataLoaded && locationRequested) {
       if (userPoint || allPolygons.length > 0) {
-        // We have either location OR data, good enough to show UI
         setIsLoading(false);
       } else {
-        // Fallback: if no location after 6 seconds, show UI anyway
         const timeoutId = setTimeout(() => {
           setIsLoading(false);
         }, 6000);

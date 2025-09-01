@@ -1,8 +1,47 @@
 {
-"type": "FeatureCollection",
-"name": "lowerpond_to_minimound",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "length": 0.00073252534782989199 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.476999951589633, 43.738519247185558 ], [ -79.477040123499009, 43.738679934823082 ], [ -79.477120467317775, 43.738810493528568 ], [ -79.477234287727683, 43.738957790529625 ], [ -79.477388280046966, 43.739125173485377 ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "name": "lowerpond_to_minimound",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "length": 75.14326529749121,
+        "degreeLength": 0.000732525347829892
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -79.47699995158963,
+              43.73851924718556
+            ],
+            [
+              -79.47704012349901,
+              43.73867993482308
+            ],
+            [
+              -79.47712046731777,
+              43.73881049352857
+            ],
+            [
+              -79.47723428772768,
+              43.738957790529625
+            ],
+            [
+              -79.47738828004697,
+              43.73912517348538
+            ]
+          ]
+        ]
+      }
+    }
+  ]
 }

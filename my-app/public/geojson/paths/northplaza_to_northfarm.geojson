@@ -1,8 +1,43 @@
 {
-"type": "FeatureCollection",
-"name": "sheppardkeele_to_northfarm",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "length": 0.00043737346211534888 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.485838443815908, 43.744332679193768 ], [ -79.485784215217095, 43.744121187658379 ], [ -79.485759812347624, 43.743978837586475 ], [ -79.485757100917681, 43.743904273263098 ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "name": "sheppardkeele_to_northfarm",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "length": 48.12610963702255,
+        "degreeLength": 0.0004373734621153489
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -79.48583844381591,
+              43.74433267919377
+            ],
+            [
+              -79.4857842152171,
+              43.74412118765838
+            ],
+            [
+              -79.48575981234762,
+              43.743978837586475
+            ],
+            [
+              -79.48575710091768,
+              43.7439042732631
+            ]
+          ]
+        ]
+      }
+    }
+  ]
 }

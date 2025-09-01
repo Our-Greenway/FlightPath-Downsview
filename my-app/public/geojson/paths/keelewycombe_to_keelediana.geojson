@@ -1,8 +1,39 @@
 {
-"type": "FeatureCollection",
-"name": "keelewycombe_to_keelediana",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "length": 0.0014612787862449776 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.485511716508128, 43.742669894782459 ], [ -79.485227016364334, 43.741474154178519 ], [ -79.485182277770306, 43.741246394063481 ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "name": "keelewycombe_to_keelediana",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "length": 160.38136041647132,
+        "degreeLength": 0.0014612787862449776
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -79.48551171650813,
+              43.74266989478246
+            ],
+            [
+              -79.48522701636433,
+              43.74147415417852
+            ],
+            [
+              -79.4851822777703,
+              43.74124639406348
+            ]
+          ]
+        ]
+      }
+    }
+  ]
 }

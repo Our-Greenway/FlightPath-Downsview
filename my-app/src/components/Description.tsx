@@ -8,6 +8,7 @@ interface DescriptionInterface {
 }
 
 const Description = ({ data }: { data: DescriptionInterface }) => {
+    /* A label that has an icon on the left and a description of something on the right. Used to describe park features sourced from the database.*/    
     const bgColour = data["bg-colour"] ? `#${data["bg-colour"]}26` : "#FFFFFF";
   
     return (

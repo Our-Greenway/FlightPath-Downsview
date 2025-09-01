@@ -170,7 +170,9 @@ const PathFinder = () => {
           <div className="bg-green-50 p-4 rounded border border-green-200">
             <h3 className="font-semibold text-green-800 mb-2">Route Found:</h3>
             <p className="text-sm text-gray-700 mb-2"><strong>Path:</strong> {pathFinder.pathNodes.join(" → ")}</p>
-            <p className="text-sm text-gray-700 mb-2"><strong>Total distance:</strong> {pathFinder.distance != null ? `${(pathFinder.distance * 100000).toFixed(2)} m` : "N/A"}</p>
+            <p className="text-sm text-gray-700 mb-2">
+              <strong>Total distance:</strong> {pathFinder.distance != null ? `${pathFinder.distance.toFixed(2)} m` : "N/A"}
+            </p>
           </div>
         )}
       </div>

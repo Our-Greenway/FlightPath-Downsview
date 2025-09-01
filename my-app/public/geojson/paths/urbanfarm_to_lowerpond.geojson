@@ -1,8 +1,47 @@
 {
-"type": "FeatureCollection",
-"name": "urbanfarm_to_otherpond",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "length": 0.00069483496516311238 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -79.477009350070858, 43.738545809842272 ], [ -79.477054088664886, 43.738698327776447 ], [ -79.477129330845756, 43.738836610703437 ], [ -79.477233043040997, 43.738952524333413 ], [ -79.477387594547622, 43.73911317655741 ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "name": "urbanfarm_to_otherpond",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": null,
+        "length": 70.95560477227485,
+        "degreeLength": 0.0006948349651631124
+      },
+      "geometry": {
+        "type": "MultiLineString",
+        "coordinates": [
+          [
+            [
+              -79.47700935007086,
+              43.73854580984227
+            ],
+            [
+              -79.47705408866489,
+              43.73869832777645
+            ],
+            [
+              -79.47712933084576,
+              43.73883661070344
+            ],
+            [
+              -79.477233043041,
+              43.73895252433341
+            ],
+            [
+              -79.47738759454762,
+              43.73911317655741
+            ]
+          ]
+        ]
+      }
+    }
+  ]
 }
