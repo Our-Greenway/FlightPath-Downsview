@@ -1,7 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "LakeLookout",
-"features": [
-{ "type": "Feature", "properties": { "id": "LakeLookout", "neighbours": [ "LakeLookout_to_Orchard", "BoakesGrove_to_LakeLookout", "KeeleDiana_to_LakeLookout", "KeeleWycombe_to_LakeLookout", "LakeLookout_to_SesquicentennialMonument", "LakeLookout_to_SwanLake" ] }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -79.482128857761637, 43.741333463521244 ], [ -79.482117044586985, 43.74107457867035 ], [ -79.482187923633049, 43.740975007275381 ], [ -79.482187923633049, 43.74081853760643 ], [ -79.482054040990676, 43.740696206489076 ], [ -79.481821715228079, 43.740582409877049 ], [ -79.481490946345829, 43.740556805609287 ], [ -79.481207430160964, 43.740588099712511 ], [ -79.481140488839799, 43.740664912442355 ], [ -79.481656330787246, 43.741100182716252 ], [ -79.482109169137232, 43.741364757218975 ], [ -79.482128857761637, 43.741333463521244 ] ] ] } }
-]
-}

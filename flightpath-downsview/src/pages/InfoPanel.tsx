@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMapContext } from '../context/MapContext';
-import ApproachingPanel from "../pages/ApproachingPanel"
-import InsidePanel from "../pages/InsidePanel"
+import ApproachingPanel from "./ApproachingPanel"
+import InsidePanel from "./InsidePanel"
 import { useOrientation } from '../context/Orientation';
 
 const LoadingScreen = () => (

@@ -387,7 +387,7 @@ function MapPage() {
             <>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-gray-900 font-semibold text-sm">Active Route</h4>
-                <button onClick={() => setRouteInfoCollapsed(true)} className="!text-gray-400 !hover:text-gray-600 transition-colors">
+                <button onClick={() => setRouteInfoCollapsed(true)} className="!bg-white !text-gray-400 !hover:text-gray-600 transition-colors">
                   <i className="fas fa-chevron-down w-4 h-4"></i>
                 </button>
               </div>

@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "KeeleWycombe",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "FID": 0, "id": "KeeleWycombe", "neighbours": [ "KeeleDiana_to_KeeleWycombe", "KeeleWycombe_to_LakeLookout", "KeeleWycombe_to_NorthFarm", "KeeleWycombe_to_SesquicentennialMonument", "KeeleWycombe_to_SwanLake" ] }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -79.485935271440951, 43.743040162178879 ], [ -79.485931334478678, 43.743040162178879 ], [ -79.485575039392941, 43.743099216612983 ], [ -79.485531732807928, 43.743020477367509 ], [ -79.485395907609501, 43.742967328376821 ], [ -79.485319136845163, 43.742697646461089 ], [ -79.485825036497303, 43.742571663668343 ], [ -79.485935271440951, 43.743040162178879 ] ] ] ] } }
-]
-}
