@@ -8,8 +8,6 @@ const MenuBar = () => {
   const buttonLabel = isPathfinder ? "Navigation" : "Pathfinder";
   const targetPath = isPathfinder ? "/" : "/pathfinder";
 
-
-
   return (
     <div className="sticky bottom-0 bg-gray-800 z-50">
       <div className="flex gap-3 justify-between border-t border-gray-700 p-2">

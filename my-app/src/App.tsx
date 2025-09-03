@@ -2,7 +2,6 @@ import { MapProvider, useMapContext } from './context/MapContext';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MapPage from './pages/MapPage';
 import InfoPanel from './pages/InfoPanel';
-import GraphTest from './pages/GraphTest';
 import LocationPrompt from './pages/LocationPrompt';
 import { useOrientation } from './context/Orientation';
 import PathFinder from './pages/PathFinder';
@@ -23,7 +22,6 @@ function MapLayout({ children }: { children: React.ReactNode }) {
           {children}
         </div>
       </div>
-      <GraphTest />
     </>
   );
 }

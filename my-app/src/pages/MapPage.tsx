@@ -367,7 +367,6 @@ function MapPage() {
           title="Reset to default view"
         >
           <i className="fas fa-refresh"></i>
-          <span className="text-sm font-medium">Reset View</span>
         </button>
         
         {userPosition && (
@@ -377,7 +376,6 @@ function MapPage() {
             title="Centre on my location"
           >
             <i className="fas fa-crosshairs"></i>
-            <span className="text-sm font-medium">Centre View</span>
           </button>
         )}
       </div>
@@ -389,7 +387,7 @@ function MapPage() {
             <>
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-gray-900 font-semibold text-sm">Active Route</h4>
-                <button onClick={() => setRouteInfoCollapsed(true)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <button onClick={() => setRouteInfoCollapsed(true)} className="!text-gray-400 !hover:text-gray-600 transition-colors">
                   <i className="fas fa-chevron-down w-4 h-4"></i>
                 </button>
               </div>

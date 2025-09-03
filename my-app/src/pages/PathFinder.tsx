@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { findPath, getAllNodes } from "../pages/GraphTest";
+import { findPath, getAllNodes } from "../context/GraphInitialize";
 import { useMapContext } from "../context/MapContext";
 import MenuBar from "../components/MenuBar";
 import { useOrientation } from '../context/Orientation';

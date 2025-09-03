@@ -33,7 +33,7 @@ files = [
     "urbanfarm_to_minimound.geojson"
 ]
 
-def line_length(coords):
+def degToMeter(coords):
     total = 0
     for i in range(len(coords) - 1):
         pt1 = (coords[i][1], coords[i][0]) 

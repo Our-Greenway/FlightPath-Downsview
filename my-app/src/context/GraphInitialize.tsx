@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import type { Feature, LineString, Polygon, MultiPolygon } from 'geojson';
-import { dijkstra, reconstructPath, buildGraph } from "../context/GraphContext";
+import { dijkstra, reconstructPath, buildGraph } from "./GraphContext";
 
 type Coordinates = [number, number];
 
