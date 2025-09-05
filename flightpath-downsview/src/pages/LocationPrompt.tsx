@@ -29,7 +29,7 @@ const LocationPrompt = () => {
       <div className="max-w-md">
         <h1 className={`text-xl font-bold mb-4 ${orientation === "portrait" ? "pt-5" : " "}`}>Welcome to FlightPath Downsview!</h1>
         <p className="mb-4">
-          FlightPath Downsview is a navigation tool built by Our Greenway for trishaw and bicycle rides in the Downsview Park area. It includes a path-finding feature and a visual guide to local attractions, designed with accessibility in mind for users who are visually impaired.
+          FlightPath Downsview is a navigation tool built by Our Greenway for Cycling Without Age rides in the Downsview Park area. It includes a path-finding feature and a visual guide to local attractions, designed to help people who are deaf and hard of hearing. 
         </p>
         <p className="mb-6">
           To get started, click on the button below. This program requires a GPS-enabled device.
@@ -40,11 +40,14 @@ const LocationPrompt = () => {
         >
           Allow Location Access
         </button>
+        <p className="mt-6 ">
+          Developmental documentation available <a className="!text-white !underline" href="https://brand.ourgreenway.ca/flightpath">here</a>. GitHub repository available <a className="!text-white !underline" href="https://github.com/Our-Greenway/FlightPath-Downsview">here</a>. 
+        </p>
       </div>
       
       <div>
-        <img src="/FlightPathDownsviewPhone.png" alt="FlightPath on a vertical phone" className="hidden md:block w-64 h-auto" />
-        <img src="/FlightPathDownsviewPhoneHorz.png" alt="FlightPath on a horizontal phone" className="block md:hidden  w-auto h-auto" />
+        <img src="/FlightPathDownsviewVertical.png" alt="FlightPath on a vertical phone" className="hidden md:block w-64 h-auto" />
+        <img src="/FlightPathDownsviewLandscape.png" alt="FlightPath on a horizontal phone" className="block md:hidden  w-auto h-auto" />
       </div>
     </div>
   </div>
